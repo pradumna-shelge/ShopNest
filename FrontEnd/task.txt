@@ -1,0 +1,85 @@
+  Date  -18/09/2023
+  1. Meeting with maniar sir
+  2. Custom validations and image upload validations
+  3. Worked on UI part and pagination
+
+
+  Date- 19/09/2023
+  1. Product edit and image validation.
+  2. Token store and decode.
+  3. Pagination, create a Custom modal.
+
+
+  Date- 20/09/2023
+  1. Functional bug solved in Vue.js project.
+  2. Searching and sorting on individual columns.
+  3. UI bugs and edit product validation.
+  4. Meeting with Maniar sir
+
+Date- 21/09/2023
+1. Encrypting and decrypting request and response data for controllers data security
+2. Print product data in Excel 
+3. Search validation and UI bug solving
+
+Date- 21/09/2023
+1. Last login detail pop-up
+2. Role base authentication and navigation
+3. Intermediate topics learning Vue.js 
+4. Meeting with Maniar sir
+
+Date- 25/09/2023
+1. Intermediate topics learning Vue.js.
+2. Meeting with Maniar sir.
+3. Forgot-password implementing in vue.js project.
+
+Date- 26/09/2023
+1. Implementing watchers, slot and provide/inject in Vue.js.
+2. User dashboard for admin in vue project.
+3. Meeting with Maniar sir.
+
+Date- 27/09/2023
+1. User dashboard for admin in vue project.
+2.user sign in and add user authentication
+2. Meeting with Maniar sir.
+
+Date- 27/09/2023
+1. User dashboard for admin in vue project.
+2. user sign-in and add user authentication
+3. Meeting with Maniar sir.
+4. View product implementation
+
+
+⁠⁠⁠Date- 28/09/2023
+1. User dashboard for password authentication with progress bar.
+2. Window scroll history store and restore for product grid.
+3. Implementing password toggle, email authentication, sorting and searching for users
+4.  Meeting with Maniar sir.
+
+⁠⁠⁠Date- 28/09/2023
+1. Add to cart table creation in SQL API development in Dotnet core.
+2. Implementation of cart component for ui user base cart data
+3.  Meeting with Maniar sir.
+
+
+⁠⁠⁠Date- 02/10/2023
+1. Add to cart frontend and API implementation
+2. Item add and remove quantity add remove quantity.
+3. Product discount on MRP and sell price on checkout
+
+
+⁠⁠⁠Date- 02/10/2023
+1. Formatting UI for Vue project .
+2. Discount, total price, checkout section implement
+
+Date- 04/10/2023
+1. Intermediate topics implementing  Vue.js
+2. Meeting with Anil sir
+3. Dot net core basics and coding standard
+4. Designing Billing form for vue project
+
+
+
+Removing of image file from server after deleting of record.
+There should be searching and sorting in grid for each column.
+
+
