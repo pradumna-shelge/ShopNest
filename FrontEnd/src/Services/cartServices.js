@@ -54,7 +54,7 @@ if (res.status === 200) {
 
 export async function ProductCartDelete(id) {
   const url = cartApi;
-  debugger;
+  
   return new Promise(async (resolve, reject) => {
     try {
       

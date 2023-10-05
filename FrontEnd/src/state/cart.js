@@ -10,7 +10,7 @@ const store = createStore({
       console.log(state.cart.length);
     },
      addList(state, product) {
-      debugger;
+      
       state.cart=product;
       console.log(state.cart.length);
     },

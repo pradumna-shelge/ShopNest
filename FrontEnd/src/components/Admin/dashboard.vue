@@ -2,7 +2,7 @@
 import * as XLSX from 'xlsx';
 
 import spinner from './spinner.vue'
-import { formatDate ,addDecimalIfMissing} from '../../Services/FormatDate'
+import { formatDate, addDecimalIfMissing } from '../../Services/FormatDate'
 
 import { reactive, ref, computed, onMounted } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
@@ -10,7 +10,7 @@ import { CustomValidationMsg } from '../../Vadidators/index'
 import { required } from '@vuelidate/validators';
 import { createToaster } from "@meforma/vue-toaster";
 import { userApi, loginApi, productApi, imageApi } from '../../Endpoints/ApiLinks'
-import { getApiData, ProductAdd, ProductDelete, ProductUpdate, discription , productName } from '../../Services/products'
+import { getApiData, ProductAdd, ProductDelete, ProductUpdate, discription, productName } from '../../Services/products'
 import { loginRole } from './../../Services/islogin'
 const currentPage = ref(1);
 const DeleteId = ref(-1);
@@ -184,7 +184,7 @@ async function addProduct() {
 }
 async function updateProduct() {
 
-  debugger;
+
   var d = await $v.value.$validate()
   if (d) {
     flag.value = true;
@@ -509,7 +509,8 @@ onMounted(() => {
                     <path
                       d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
                   </svg><svg @click="sortColumn('productName', false)" xmlns="http://www.w3.org/2000/svg" width="16"
-                    height="16" fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    height="16" fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill"
+                    viewBox="0 0 16 16">
                     <path
                       d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
                   </svg></span>
@@ -527,7 +528,8 @@ onMounted(() => {
                     <path
                       d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
                   </svg><svg @click="sortColumn('description', false)" xmlns="http://www.w3.org/2000/svg" width="16"
-                    height="16" fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    height="16" fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill"
+                    viewBox="0 0 16 16">
                     <path
                       d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
                   </svg></span>
@@ -546,7 +548,8 @@ onMounted(() => {
                     <path
                       d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
                   </svg><svg @click="sortColumn('price', false)" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                    fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill"
+                    viewBox="0 0 16 16">
                     <path
                       d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
                   </svg></span>
@@ -570,7 +573,8 @@ onMounted(() => {
                     <path
                       d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
                   </svg><svg @click="sortColumn('mrp', false)" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                    fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill"
+                    viewBox="0 0 16 16">
                     <path
                       d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
                   </svg></span>
@@ -602,7 +606,8 @@ onMounted(() => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(p, index) in displayedProducts" :key="index" class="cursor-pointer hover:bg-gray-100 cursor-pointer">
+            <tr v-for="(p, index) in displayedProducts" :key="index"
+              class="cursor-pointer hover:bg-gray-100 cursor-pointer">
               <td class="px-5 py-2  border-b  ">
                 <div class="flex items-center justify-start gap-3  ">
                   <div class=" ">
@@ -610,7 +615,7 @@ onMounted(() => {
                   </div>
 
                   <div class=" text-black     text-sm">
-                    {{ productName( p.productName )}}
+                    {{ productName(p.productName) }}
                   </div>
 
                 </div>
@@ -824,5 +829,4 @@ th {
     transform: translateY(0px);
     opacity: 1;
   }
-}
-</style>
+}</style>

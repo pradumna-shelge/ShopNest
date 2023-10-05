@@ -1,16 +1,14 @@
 <script setup lang="js">
-import { ref, onMounted, computed,watch, reactive } from 'vue';
+import { ref, onMounted, computed, watch, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { getCartData, ProductCartDelete, addCartData } from '../Services/cartServices'
 import { getApiData, discription, productName } from '../Services/products'
-import { location } from '../Services/location';
-import { CustomValidationMsg, passwordValidator } from '.././Vadidators/index'
-import { email, minLength, required } from '@vuelidate/validators';
-import { useVuelidate } from '@vuelidate/core';
 
+import { getAddresses } from '../Services/deliveryAddress'
+import AddressForm from './userOrder/user-address.vue'
 const store = useStore();
 const cartItems = computed(() => store.getters.cartItems)
-const orderFlag=ref(1)
+const orderFlag = ref(1)
 const loadCartData = () => {
   getCartData()
     .then((data) => {
@@ -21,82 +19,27 @@ const loadCartData = () => {
 
     });
 }
-const countries = ref( location);
 
-
-const selectedCity = ref('');
-let formData = reactive({
-  selectedCountry: '',
-  selectedState: '',
-  selectedCity: '',
-  firstName: '',
-  lastName: '',
-   address:'',
-   zip: ''
-});
-
-const rules = computed(() => {
-  return {
-     selectedCountry: {required},
-    selectedState: {required},
-    selectedCity: { required },
-     firstName: {required},
-    lastName: {required},
-    address: {required},
-    zip: { required }
-
-  };
-});
-const $v = useVuelidate(rules, formData);
-
-
-const states = ref([]);
-const cities = ref([]);
-
-watch(() => formData.selectedCountry, (newCountry) => {
-  debugger;
-  const country = countries.value.find((c) => c.Name === newCountry);
-  if (country) {
-    states.value = country.Children.filter((state) => state.Name);
-    console.log(states.value);
-    formData.selectedState = '';
-    formData.selectedCity = '';
-    cities.value=null
-  }
-}, { deep: true });
-
-
-watch(() => formData.selectedState, (newState) => {
-  debugger;
-  const selectedCountryName = formData.selectedCountry;
-  const country = countries.value.find((c) => c.Name === selectedCountryName);
-  if (country) {
-    const state = country.Children.find((s) => s.Name === newState);
-    if (state) {
-      cities.value = state.Children.filter((city) => city.Name);
-      formData.selectedCity = '';
-    }
-  }
-}, { deep: true });
 
 
 const openModal = ref(false);
 const DeleteId = ref(0);
 const open = (id) => {
-  debugger;
+
   openModal.value = true;
   DeleteId.value = id
 }
 const closeModal = () => {
   openModal.value = false;
   DeleteId.value = -1
+  addNewFlag.value=false;
 }
 
 
 
 
 const removeFromCart = () => {
-  debugger;
+
   ProductCartDelete(DeleteId.value).then((d) => {
     getCartData()
       .then((data) => {
@@ -116,7 +59,7 @@ const removeFromCart = () => {
 
 const updateCount = (name, quantity, incFlg) => {
   const count = incFlg ? quantity + 1 : quantity - 1;
-  debugger;
+
   addCartData(name, count).then((d) => {
     getCartData()
       .then((data) => {
@@ -130,25 +73,51 @@ const updateCount = (name, quantity, incFlg) => {
     console.log(d)
   });
 }
-
+// ============================add address=========
+const addAddress=()=>{
+  addNewFlag.value=true;
+}
 
 
 // ===================================================checkout======================
-const ProceedChekout=()=>{
-  orderFlag.value=2;
+const selectedAddress = ref({})
+const addNewFlag = ref(false);
+const userAddress = ref({})
+const ProceedChekout = () => {
+
+  getAddresses().then((d) => {
+
+    orderFlag.value = 2;
+    console.log(d);
+    userAddress.value = d
+  }).catch((d) => {
+    console.log(d)
+  });
 }
 async function proceedPay() {
   var d = await $v.value.$validate()
-  
+
   if (d) {
     orderFlag.value = 3;
 
-    await AddUser(formData.username, formData.email, formData.password);
+    
   }
 }
-async function ProceedOrder () {
+async function ProceedOrder() {
   orderFlag.value = 1;
 
+}
+
+const UpdateAddress=ref({})
+const PatchAddress=(item)=>{
+
+
+  const button = document.getElementById('updateAddress');
+  if (button) {
+    addNewFlag.value=true;
+    UpdateAddress.value=item
+    button.click();
+  }
 }
 onMounted(() => {
 
@@ -161,38 +130,52 @@ onMounted(() => {
 
 <template>
 
-  <div v-show="orderFlag>1" class="mx-10 flex justify-center w-full">
+  <div v-show="orderFlag > 1" class="mx-10 flex justify-center w-full">
 
-    
-  <ol class="flex items-center w-96">
-      <li class="flex w-full items-center text-blue-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block dark:after:border-blue-800">
-          <span class="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full lg:h-12 lg:w-12 dark:bg-blue-800 shrink-0">
-              <svg class="w-3.5 h-3.5 text-blue-600 lg:w-4 lg:h-4 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-              </svg>
-          </span>
+
+    <ol class="flex items-center w-96">
+      <li
+        class="flex w-full items-center text-blue-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block dark:after:border-blue-800">
+        <span
+          class="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full lg:h-12 lg:w-12 dark:bg-blue-800 shrink-0">
+          <svg class="w-3.5 h-3.5 text-blue-600 lg:w-4 lg:h-4 dark:text-blue-300" aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M1 5.917 5.724 10.5 15 1.5" />
+          </svg>
+        </span>
       </li>
-      <li class="flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block dark:after:border-gray-700">
-        <span v-if="orderFlag>2" class="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full lg:h-12 lg:w-12 dark:bg-blue-800 shrink-0">
-                <svg class="w-3.5 h-3.5 text-blue-600 lg:w-4 lg:h-4 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-                </svg>
-            </span> 
-        <span v-else  class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full lg:h-12 lg:w-12 dark:bg-gray-700 shrink-0">
-              <svg class="w-4 h-4 text-gray-500 lg:w-5 lg:h-5 dark:text-gray-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                  <path d="M18 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM6.5 3a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3.014 13.021l.157-.625A3.427 3.427 0 0 1 6.5 9.571a3.426 3.426 0 0 1 3.322 2.805l.159.622-6.967.023ZM16 12h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Z"/>
-              </svg>
-          </span>
+      <li
+        class="flex w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-100 after:border-4 after:inline-block dark:after:border-gray-700">
+        <span v-if="orderFlag > 2"
+          class="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full lg:h-12 lg:w-12 dark:bg-blue-800 shrink-0">
+          <svg class="w-3.5 h-3.5 text-blue-600 lg:w-4 lg:h-4 dark:text-blue-300" aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M1 5.917 5.724 10.5 15 1.5" />
+          </svg>
+        </span>
+        <span v-else
+          class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full lg:h-12 lg:w-12 dark:bg-gray-700 shrink-0">
+          <svg class="w-4 h-4 text-gray-500 lg:w-5 lg:h-5 dark:text-gray-100" aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+            <path
+              d="M18 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM6.5 3a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3.014 13.021l.157-.625A3.427 3.427 0 0 1 6.5 9.571a3.426 3.426 0 0 1 3.322 2.805l.159.622-6.967.023ZM16 12h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Z" />
+          </svg>
+        </span>
       </li>
       <li class="flex items-center w-full">
 
-          <span class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full lg:h-12 lg:w-12 dark:bg-gray-700 shrink-0">
-              <svg class="w-4 h-4 text-gray-500 lg:w-5 lg:h-5 dark:text-gray-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                  <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z"/>
-              </svg>
-          </span>
+        <span
+          class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full lg:h-12 lg:w-12 dark:bg-gray-700 shrink-0">
+          <svg class="w-4 h-4 text-gray-500 lg:w-5 lg:h-5 dark:text-gray-100" aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+            <path
+              d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z" />
+          </svg>
+        </span>
       </li>
-  </ol>
+    </ol>
 
   </div>
 
@@ -201,7 +184,7 @@ onMounted(() => {
 
     <!-- Card Grid -->
     <div class="w-1/3 ">
-      <section v-show="orderFlag==1" >
+      <section v-show="orderFlag == 1">
 
 
         <p class="text-gray-500 mx-3">You have {{ store.getters.cartItemCount }} items in your cart</p>
@@ -252,129 +235,95 @@ onMounted(() => {
         </div>
       </section>
       <section v-show="orderFlag == 2">
-    
-      <div class="mt-5">
-        <div class="p-4 border rounded-lg bg-white">
-          <h2 class="text-xl font-semibold mb-4">Billing Address</h2>
 
-          <!-- Billing Address Form -->
-          <form @submit.prevent="proceedPay" >
-      <!-- Billing Address Fields -->
-      <div class="grid grid-cols-2 gap-4">
-        <!-- First Name -->
-        <div class="col-span-1">
-          <label for="first_name" class="block text-sm font-medium text-gray-700">First Name</label>
-          <input v-model="formData.firstName" type="text" id="first_name" name="first_name" class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-        <span class="text-red-400 text-xs text-end text-right" v-for="error in $v.firstName.$errors">{{ CustomValidationMsg(error.$message, "first name") }}</span>
-
-        </div>
-
-        <!-- Last Name -->
-        <div class="col-span-1">
-          <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
-          <input v-model="formData.lastName" type="text" id="last_name" name="last_name" class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                <span class="text-red-400 text-xs text-end text-right" v-for="error in $v.lastName.$errors">{{ CustomValidationMsg(error.$message, "last name") }}</span>
-
-        </div>
-
-        <!-- Address Line 1 -->
-        <div class="col-span-2">
-          <label for="address" class="block text-sm font-medium text-gray-700">Address Line 1</label>
-          <input v-model="formData.address" type="text" id="address" name="address" class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                        <span class="text-red-400 text-xs text-end text-right" v-for="error in $v.address.$errors">{{ CustomValidationMsg(error.$message, "address") }}</span>
-
-        </div>
-
-        <!-- Country -->
-        <div class="col-span-1">
-          <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
-          <select v-model="formData.selectedCountry" id="country" name="country" class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-            <option v-for="country in countries" :key="country.LocationID" :value="country.Name">{{ country.Name }}</option>
-          </select>
-                                  <span class="text-red-400 text-xs text-end text-right" v-for="error in $v.selectedCountry.$errors">{{ CustomValidationMsg(error.$message, "selectedCountry") }}</span>
-
-        </div>
-
-        <!-- State/Province -->
-        <div class="col-span-1">
-          <label for="state" class="block text-sm font-medium text-gray-700">State/Province</label>
-          <select v-model="formData.selectedState" id="state" name="state" class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-            <option v-for="state in states" :key="state.LocationID" :value="state.Name">{{ state.Name }}</option>
-          </select>
-                                            <span class="text-red-400 text-xs text-end text-right" v-for="error in $v.selectedState.$errors">{{ CustomValidationMsg(error.$message, "selectedState") }}</span>
-
-        </div>
-
-        <!-- City -->
-        <div class="col-span-1">
-          <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-          <select v-model="formData.selectedCity" id="city" name="city" class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-            <option v-for="city in cities" :key="city.LocationID" :value="city.Name">{{ city.Name }}</option>
-          </select>
-                                                      <span class="text-red-400 text-xs text-end text-right" v-for="error in $v.selectedCity.$errors">{{ CustomValidationMsg(error.$message, "selectedCity") }}</span>
-
-        </div>
-
-        <!-- ZIP/Postal Code -->
-        <div class="col-span-1">
-          <label for="zip" class="block text-sm font-medium text-gray-700">ZIP/Postal Code</label>
-          <input v-model="formData.zip" type="text" id="zip" name="zip" class="mt-1 focus:ring-cyan-500 focus:border-cyan-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                                              <span class="text-red-400 text-xs text-end text-right" v-for="error in $v.zip.$errors">{{ CustomValidationMsg(error.$message, "zip") }}</span>
-
-        </div>
-
-        <!-- Continue Button -->
-        <div class="mt-6">
-          <button type="submit"  class="bg-cyan-600 text-white hover:bg-cyan-700 py-2 px-4 rounded-md w-full">
-            Proceed to Pay
-          </button>
-        </div>
-      </div>
-    </form>
-        </div>
-      </div>
-    
-      </section>
-       <section v-show="orderFlag == 3">
-      <div class="mt-5 w-full">
-        
-        <div class="p-4 border rounded-lg bg-white w-full">
-          <h2 class="text-xl font-semibold mb-4">Order Details</h2>
-        
-          
-          <div v-for="(item, index) in cartItems" :key="item.cartId">
+        <div class="mt-5">
          
-           <div class="flex items-center bg-white rounded-lg p-4 shadow-md mb-4 ">
-    <img class="w-16 h-16 rounded-full mr-4" :src="item.productImage" alt="">
-    <div class="w-full">
-      <p class="text-lg font-semibold">{{ item.productName }}</p>
-      <p class="text-gray-600 flex justify-between"> <span>{{ item.quantity }}</span> <span>${{ item.price }}</span>   </p>
-    </div>
-  </div>
+
+          <div>
+           <AddressForm :UpdateAddress="UpdateAddress"  :addNewFlag="addNewFlag" @closeModal="closeModal()" @updateAddress='updateAddress()' ></AddressForm>
+          </div>
+
+          <div>
+            <div class="flex justify-end m-2  ">
+              <button v-show="!addNewFlag" @click="()=>{ addNewFlag=true}" class="bg-gray-800 p-1 rounded text-white text-xs">+ New Address</button>
+            </div>
+            <div class="p-4 border rounded-lg bg-white">
+              <h2 class="text-xl font-semibold mb-4">Shipping Address</h2>
+              <div v-for="(item, index) in userAddress" :key="index">
+                <div class=" p-3 shadow-md rounded  my-3 flex justify-between item-center">
+                  <label class="inline-flex items-center">
+                    <input name="delivery" :checked="index==0" type="radio" v-model="selectedAddress" :value="item" class="form-radio text-blue-500" />
+                    <span class="ml-2 text-gray-900 text-sm">{{ item.firstName }} {{ item.lastName }},</span>
+                    <span class="ml-2 text-gray-700 text-xs">{{ item.address }}, {{ item.city }}, {{ item.state }}, {{
+                      item.country }}, {{ item.zip }}</span>
+                  </label>
+
+                  <!-- Edit button -->
+                  <button v-show="selectedAddress.addressId == item.addressId" @click="PatchAddress(item)"
+                    class="text-blue-500 text-xs underline"><svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                      viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                    </svg></button>
+
+                  <!-- Add other billing address details as needed -->
+                </div>
+              </div>
+            </div>
+
 
           </div>
+
+          <div class="mt-6">
+            <button @click="proceedPay" class="bg-cyan-600 text-white hover:bg-cyan-700 py-2 px-4 rounded-md w-full">
+              Proceed to Pay
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div class="mt-5">
-        <!-- Billing Address -->
-  <div class="p-4 border rounded-lg bg-white">
-    <h2 class="text-xl font-semibold mb-4">Delivery Address</h2>
+      </section>
+      <section v-show="orderFlag == 3">
+        <div class="mt-5 w-full">
 
-    <div class="space-y-2">
-      <p><span class="font-semibold"></span> {{ formData.firstName }} {{ formData.lastName }},</p>
-      <p><span class="text-gray-600"></span> {{ formData.address }},</p>
-     <p><span class="text-gray-600"></span>  {{ formData.selectedCity }}, {{ formData.selectedState }}, {{ formData.selectedCountry }}, {{ formData.zip }}</p>
+          <div class="p-4 border rounded-lg bg-white w-full">
+            <h2 class="text-xl font-semibold mb-4">Order Details</h2>
 
-      <!-- Add other billing address details as needed -->
+
+            <div v-for="(item, index) in cartItems" :key="item.cartId">
+
+              <div class="flex items-center bg-white rounded-lg p-4 shadow-md mb-4 ">
+                <img class="w-16 h-16 rounded-full mr-4" :src="item.productImage" alt="">
+                <div class="w-full">
+                  <p class="text-lg font-semibold">{{ item.productName }}</p>
+                  <p class="text-gray-600 flex justify-between"> <span>{{ item.quantity }}</span> <span>${{ item.price
+                  }}</span> </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-5">
+          <!-- Billing Address -->
+          <div class="p-4 border rounded-lg bg-white">
+            <h2 class="text-xl font-semibold mb-4">Delivery Address</h2>
+
+            <div class="space-y-2">
+              <p><span class="font-semibold"></span> {{ selectedAddress.firstName }} {{ selectedAddress.lastName }},</p>
+              <p><span class="text-gray-600"></span> {{ selectedAddress.address }},</p>
+              <p><span class="text-gray-600"></span> {{ selectedAddress.city }}, {{ selectedAddress.state }}, {{ selectedAddress.country }}, {{
+                selectedAddress.zip }}</p>
+
+              <!-- Add other billing address details as needed -->
+            </div>
+          </div>
+
+
+        </div>
+      </section>
     </div>
-  </div>
-
-
-      </div>
-    </section>
-    </div>
-    <div class="mt-5 w-1/4">
+    <div class="mt-5 w-1/6">
 
       <div class="   p-4 border  rounded-lg bg-white">
         <h2 class="text-xl font-semibold mb-4">Checkout</h2>
@@ -399,16 +348,18 @@ onMounted(() => {
         </div>
 
         <!-- Checkout Button -->
-        <button v-show="orderFlag == 1" @click="ProceedChekout()" class="mt-4 bg-cyan-600 text-white hover:bg-cyan-700 py-2 px-4 rounded-md w-full">
+        <button v-show="orderFlag == 1" @click="ProceedChekout()"
+          class="mt-4 bg-cyan-600 text-white hover:bg-cyan-700 py-2 px-4 rounded-md w-full">
           Proceed to Checkout
         </button>
 
         <!-- <button v-show="orderFlag == 2" @click="ProceedPay()" class="mt-4 bg-cyan-600 text-white hover:bg-cyan-700 py-2 px-4 rounded-md w-full">
             Proceed to Pay
           </button> -->
-             <button v-show="orderFlag == 3" @click="ProceedOrder()" class="mt-4 bg-cyan-600 text-white hover:bg-cyan-700 py-2 px-4 rounded-md w-full">
-              Order Now
-            </button>
+        <button v-show="orderFlag == 3" @click="ProceedOrder()"
+          class="mt-4 bg-cyan-600 text-white hover:bg-cyan-700 py-2 px-4 rounded-md w-full">
+          Order Now
+        </button>
       </div>
     </div>
   </div>

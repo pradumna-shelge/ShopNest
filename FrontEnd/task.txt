@@ -77,7 +77,12 @@ Date- 04/10/2023
 3. Dot net core basics and coding standard
 4. Designing Billing form for vue project
 
-
+Date- 05/10/2023
+1. User shopping address table and API controllers
+   in .NET core for adding and updating delivery address
+2. Implementation UI for address add from in
+   vue.js with validation.
+3. Meeting with Maniar Sir.
 
 Removing of image file from server after deleting of record.
 There should be searching and sorting in grid for each column.

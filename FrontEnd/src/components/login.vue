@@ -38,7 +38,7 @@ const rules = computed(() => {
 
 const $v = useVuelidate(rules, formData);
 async function signIn() {
-    debugger;
+
 
     var d = await $v.value.$validate()
 
@@ -53,7 +53,7 @@ async function signIn() {
                 })
                 .catch((error) => {
                 });
-                 localStorage.setItem("loginFlag", true)
+            localStorage.setItem("loginFlag", true)
         }
         );
 
@@ -145,7 +145,8 @@ const passwordToggle = () => {
     </section>
 
 
-<forgotpassword :childRef="childRef" @closeModal="closeModal"></forgotpassword></template>
+    <forgotpassword :childRef="childRef" @closeModal="closeModal"></forgotpassword>
+</template>
 
 
 

@@ -93,7 +93,7 @@ export let AddUser = async (username, email, password) => {
       email: email,
       passwordHash: password,
     });
-    debugger;
+    
     console.log(res.data);
     toaster.info(
       "Congratulations! 🎉 You've successfully signed up for ShopNest."
@@ -112,7 +112,7 @@ export let forgotPassword = async (username) => {
 
   try {
     const res = await axios.post(url);
-    debugger;
+    
     console.log(res.data);
     // toaster.success("Password reset instructions sent to your email.");
   } catch (err) {
