@@ -79,41 +79,7 @@ const rules = computed(() => {
 
 const $v = useVuelidate(rules, productData);
 
-// function handleImageChange(event) {
-//   const fileData = event.target.files[0];
-//   console.log(fileData);
 
-//   const selectedFile = event.target.files[0];
-//   const reader = new FileReader();
-//   reader.onload = (e) => {
-//     const content = new Uint8Array(e.target.result);
-//     if (!isJpeg(content)) {
-//       toaster.error("Invalid image content. Please select a valid image file.");
-//       event.target.value = "";
-
-//     } 
-//   };
-
-//   if (selectedFile) {
-//     const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/bmp"];
-//     const fileType = selectedFile.type;
-//     const maxSize = 2 * 1024 * 1024;
-
-//     if (!allowedTypes.includes(fileType.toLowerCase())) {
-//       toaster.error("Unsupported file type. Please select a PNG, JPEG, JPG, or BMP file.");
-
-//       event.target.value = "";
-//     }
-//     else if (selectedFile.size > maxSize) {
-//       toaster.error("File size exceeds the maximum limit of 2 MB.");
-//       event.target.value = "";
-//     }
-//     else {
-
-//       productData.productImage = fileData;
-//     }
-//   }
-// }
 function handleImageChange(event) {
   const fileData = event.target.files[0];
   console.log(fileData);
@@ -659,11 +625,10 @@ onMounted(() => {
                 </button>
                 <button @click="open(p.productId)" class="Btn py-3 hover:text-sky-900 text-sky-700 mt-1">
                   <router-link :to="{ name: 'product', params: { nameOfProduct: p.productName } }">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                      class="bi bi-arrows-angle-expand" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd"
-                        d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707z" />
-                    </svg>
+                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+  </svg>
                   </router-link>
 
                   <span class="tooltip">View</span>

@@ -42,7 +42,7 @@ namespace BackEnd.Controllers
                 _contex.Products,
                 cart => cart.ProductId,
                 mapping => mapping.ProductId,
-                (cart, mapping) => new
+                (cart, mapping) => new        
                 {
                     Price = $"{mapping.Price:0.00}",
                     Mrprice = $"{mapping.Mrprice:0.00}",
@@ -66,7 +66,7 @@ namespace BackEnd.Controllers
             {
 
             var cartData = await _contex.AddToCarts.ToListAsync();
-                var productData = await _contex.Products.ToListAsync();
+                var productData = await _contex.Products.ToListAsync();    
             
             if(cartData == null || productData == null)
             {

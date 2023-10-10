@@ -37,8 +37,7 @@ const resetPassword = async () => {
     try {
         const valid = await $vForgotPassword.value.$validate();
         if (valid) {
-            // Perform reset password logic here
-            // ...
+           
           
         }
     } catch (error) {

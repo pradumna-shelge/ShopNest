@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackEnd.Models;
+using BackEnd.DTOs;
+using static BackEnd.DTOs.DelivaryAddressDto;
 
 namespace BackEnd.Controllers
 {
@@ -65,50 +67,80 @@ namespace BackEnd.Controllers
             return Ok(query);
         }
 
-        // PUT: api/DeliveryAddresses/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDeliveryAddress(int id, DeliveryAddress deliveryAddress)
+     
+        [HttpPut]
+        public async Task<IActionResult> PutDeliveryAddress(AddressDTO obj)
         {
-            if (id != deliveryAddress.AddressId)
+            try
             {
-                return BadRequest();
+            if(obj == null)
+            {
+                return NotFound();
+            }
+            var newAddress = await _context.DeliveryAddresses.FirstOrDefaultAsync(d => d.AddressId == (obj.addressId??-1));
+            if(newAddress == null || obj.addressId==null)
+            {
+                return NotFound();
             }
 
-            _context.Entry(deliveryAddress).State = EntityState.Modified;
+
+
+            newAddress.FirstName = obj.firstName;
+            newAddress.LastName = obj.lastName;
+            newAddress.AddressId = (obj.addressId ?? -1);
+            newAddress.Country = obj.country;
+            newAddress.State = obj.state;
+            newAddress.City = obj.city;
+            newAddress.Zip = obj.zip;
+                newAddress.AddressLine = obj.address;
+            await _context.SaveChangesAsync();
+            return Ok(newAddress);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<DeliveryAddress>> PostDeliveryAddress(AddressDTO obj)
+        {
 
             try
             {
+                if(obj == null)
+                {
+                    return BadRequest();
+
+                }
+                var userObj = await _context.Users.FirstOrDefaultAsync(u => u.Username == obj.username);
+                if(userObj == null)
+                {
+                    return BadRequest();
+                }
+                var newAddress = new DeliveryAddress()
+                {
+                    FirstName = obj.firstName,
+                    LastName = obj.lastName,
+                    AddressLine = obj.address,
+                    City = obj.city,
+                    Zip = obj.zip,
+                    Country = obj.country,
+                    State = obj.state,
+                    UserId=userObj.UserId
+                };
+
+                await _context.AddAsync(newAddress);
                 await _context.SaveChangesAsync();
+                return Ok(newAddress);
+
+
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!DeliveryAddressExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex);
             }
-
-            return NoContent();
-        }
-
-        // POST: api/DeliveryAddresses
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<DeliveryAddress>> PostDeliveryAddress(DeliveryAddress deliveryAddress)
-        {
-          if (_context.DeliveryAddresses == null)
-          {
-              return Problem("Entity set 'MyShoppingContext.DeliveryAddresses'  is null.");
-          }
-            _context.DeliveryAddresses.Add(deliveryAddress);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetDeliveryAddress", new { id = deliveryAddress.AddressId }, deliveryAddress);
         }
 
         // DELETE: api/DeliveryAddresses/5

@@ -10,8 +10,6 @@ const props =defineProps(['addNewFlag', 'UpdateAddress'])
 const emit = defineEmits()
 const closeModal = () => {
     reset();
-
-
     emit('closeModal')
 }
 const UpdateFlag = ref(false);

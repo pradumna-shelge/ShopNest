@@ -327,6 +327,18 @@ namespace BackEnd.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            
+
+           
+                    var orderItems = await _context.OrderItems.Where(or => or.ProductId == id).ToListAsync();
+
+                    _context.OrderItems.RemoveRange(orderItems);
+                    await _context.SaveChangesAsync();
+                
+
+               
+            
+
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
 

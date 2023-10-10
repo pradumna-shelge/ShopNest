@@ -84,7 +84,23 @@ Date- 05/10/2023
    vue.js with validation.
 3. Meeting with Maniar Sir.
 
+
+Date- 06/10/2023
+1. Shopping address update and new add by frontend.
+2. Stepper Implementation for observing progress  
+
+
+
+Date- 09/10/2023
+1. Solving some bugs suggested by Maniar sir.
+2. Order table and controllers in dot net.
+3. Placing order resetting user-cart (70%)
+
+
+
+
 Removing of image file from server after deleting of record.
 There should be searching and sorting in grid for each column.
 
 
+Thank you! Your order has been placed

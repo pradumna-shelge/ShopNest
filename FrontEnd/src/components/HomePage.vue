@@ -13,9 +13,8 @@ import { useStore } from 'vuex';
 import  WelcomeMsg  from './WelcomeMsg.vue'
 const store = useStore();
 
-//
+
 onBeforeRouteLeave((to, from) => {
-  // Check if the condition for a specific route is met
   if (to.name === 'product' ) {
     storeScrollPosition();
   }

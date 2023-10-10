@@ -55,4 +55,6 @@ html {
 #screen{
     min-height: 1000px;
 }
-  
+  button:hover{
+    cursor: pointer;
+  }

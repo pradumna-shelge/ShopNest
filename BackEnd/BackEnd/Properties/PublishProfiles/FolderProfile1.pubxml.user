@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>D:\VUE\Vue-Explore\project\buildFolder\backend</_PublishTargetUrl>
-    <History>True|2023-09-19T09:22:48.2420663Z;True|2023-09-19T13:54:23.2681163+05:30;True|2023-09-18T18:17:04.3821382+05:30;True|2023-09-18T18:15:37.2056011+05:30;True|2023-09-15T18:11:34.0810638+05:30;</History>
+    <History>True|2023-10-09T12:33:15.7667892Z;True|2023-10-06T15:13:11.0788304+05:30;True|2023-10-06T14:53:45.0323392+05:30;True|2023-09-19T14:52:48.2420663+05:30;True|2023-09-19T13:54:23.2681163+05:30;True|2023-09-18T18:17:04.3821382+05:30;True|2023-09-18T18:15:37.2056011+05:30;True|2023-09-15T18:11:34.0810638+05:30;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>
