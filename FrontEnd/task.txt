@@ -66,15 +66,14 @@ Date- 27/09/2023
 2. Item add and remove quantity add remove quantity.
 3. Product discount on MRP and sell price on checkout
 
-
 ⁠⁠⁠Date- 02/10/2023
-1. Formatting UI for Vue project .
+1. Formatting UI for Vue project.
 2. Discount, total price, checkout section implement
 
 Date- 04/10/2023
-1. Intermediate topics implementing  Vue.js
+1. Intermediate topics implementing Vue.js
 2. Meeting with Anil sir
-3. Dot net core basics and coding standard
+3. Dot net core basics and coding standard 
 4. Designing Billing form for vue project
 
 Date- 05/10/2023
@@ -84,23 +83,31 @@ Date- 05/10/2023
    vue.js with validation.
 3. Meeting with Maniar Sir.
 
-
 Date- 06/10/2023
 1. Shopping address update and new add by frontend.
-2. Stepper Implementation for observing progress  
-
-
-
+2. Stepper Implementation for observance progress  
+ 
 Date- 09/10/2023
 1. Solving some bugs suggested by Maniar sir.
 2. Order table and controllers in dot net.
 3. Placing order resetting user-cart (70%)
 
+Date- 10/10/2023
+1. Solving some bugs suggested by Maniar sir.
+2. Order invoke controller in dot net.
+3. Invoke PDF template in vue3 using pdf-lib download after order success.
+ 
+Date- 11/10/2023
+1. Solving some bugs suggested by Maniar sir.
+2. Go through .NET coding guidelines.
+3. Solving some errors in API controllers.
 
+Date- 12/10/2023
+1. Revising advanced concepts of .Net and C#.
+2. Conversation with Anil sir to update profile document.
+3. Given PreAssistant test.
 
-
+Solving some bugs in the website, user-cart default screen for no Item.
 Removing of image file from server after deleting of record.
-There should be searching and sorting in grid for each column.
-
-
-Thank you! Your order has been placed
+There should be searching and sorting in the grid for each column.
+Thank you! Your order has been placed. 

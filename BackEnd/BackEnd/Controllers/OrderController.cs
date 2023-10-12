@@ -86,20 +86,20 @@ namespace BackEnd.Controllers
 
         private long GenerateRandomInvoiceNumber(int orderId)
         {
-            // Get the current date and time as a numeric string
-            string currentDateNumeric = DateTime.Now.ToString("yyyyMMddHHmmss");
+  
+            string currentDateNumeric = DateTime.Now.ToString("yyyyMMdd");
 
-            // Combine the order ID and current date numeric string
-            string invoiceNumberStr = $"{orderId}{currentDateNumeric}";
+       
+            string invoiceNumberStr = $"{currentDateNumeric}{orderId}";
 
-            // Convert the combined string to a long integer
+            
             if (long.TryParse(invoiceNumberStr, out long invoiceNumber))
             {
                 return invoiceNumber;
             }
             else
             {
-                // Handle the case where the conversion fails
+                
                 throw new InvalidOperationException("Failed to generate a valid numeric invoice number.");
             }
         }

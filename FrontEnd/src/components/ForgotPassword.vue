@@ -31,7 +31,7 @@ const forgotPasswordRules = computed(() => {
 });
 
 const $vForgotPassword = useVuelidate(forgotPasswordRules, forgotPasswordFormData);
-
+ 
 const resetPassword = async () => {
 
     try {

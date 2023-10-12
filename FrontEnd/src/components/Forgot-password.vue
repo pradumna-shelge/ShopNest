@@ -8,18 +8,17 @@ const forgotPasswordFormData = reactive({
     username: '',
 });
 const modalForgot = ref(false);
-let timer = null
+let timer = null;
 const { childRef }=defineProps(['childRef']);
 const emits = defineEmits();
 const sentFlag = ref(true);
 const closeModal = () => {
-    forgotPasswordFormData.username=''
+    forgotPasswordFormData.username='';
     $vForgotPassword.value.$reset();
     if(timer)clearInterval(timer);
     remainingTime.value = 5;
     sentFlag.value =true;
-    emits("closeModal")
-
+    emits("closeModal");
 };
 const forgotPasswordRules = computed(() => {
     return {
@@ -28,8 +27,6 @@ const forgotPasswordRules = computed(() => {
 });
 
 const remainingTime = ref(5); 
-
-
 const startCountdown = () => {
     const intervalId = setInterval(() => {
         remainingTime.value--; 
@@ -41,14 +38,12 @@ const startCountdown = () => {
     timer = intervalId
 };
 const $vForgotPassword = useVuelidate(forgotPasswordRules, forgotPasswordFormData);
-
 const resetPassword = async () => {
     try {
         const valid = await $vForgotPassword.value.$validate();
         if (valid) {
             await forgotPassword(forgotPasswordFormData.username).then((d)=>{
-                sentFlag.value=false
-
+                sentFlag.value=false;
                 startCountdown()
             });
         }
@@ -58,15 +53,11 @@ const resetPassword = async () => {
     }
 };
 
-
-
 </script>
 
 
 <template>
- 
-
-     <div  class="modal "  v-show="childRef">
+   <div  class="modal "  v-show="childRef">
                       <div class="modal-content rounded-xl text-center ">
                              <span @click="closeModal" class="hover:cursor-pointer text-rose-500" style="float:right;">&times;</span>
            
@@ -80,16 +71,13 @@ const resetPassword = async () => {
                             class="text-center text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                             Reset Password
                         </h1>
-
                         <form class="space-y-4 md:space-y-6" @submit.prevent="resetPassword">
                             <div>
                                 <input type="text" v-model="forgotPasswordFormData.username"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Enter your username">
-                                    <div class="flex justify-start">
-
-                                        <span class="text-red-400 text-xs text-left " v-for="error in $vForgotPassword.username.$errors"
-                                            :key="error">
+                                   <div class="flex justify-start ">
+                                        <span class="text-red-400 text-xs text-left " v-for="error in $vForgotPassword.username.$errors":key="error">
                                             {{ CustomValidationMsg(error.$message, "Username"), error.$message }}
                                         </span>
                                     </div>

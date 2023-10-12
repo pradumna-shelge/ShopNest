@@ -159,13 +159,13 @@ const generatePDF = async (no) => {
   const date = new Date()
   page.drawText(`Date:${formatDate(date)}`, {
     x: 400,
-    y: 480,
-    size: 11,
+    y: 500,
+    size: 12,
   });
 
-  page.drawText(`Invoke No: ${no}`, {
+  page.drawText(`Invoice No: ${no}`, {
     x: 400,
-    y: 500,
+    y: 480,
     size: 12,
   });
   page.drawText('Shipping Address:', {
@@ -183,7 +183,7 @@ const generatePDF = async (no) => {
     y: 455,
     size: 12,
   });
-  page.drawText(`City: ${address.city}, State: ${address.state},  Country: ${address.country},Zip: ${address.zip}`, {
+  page.drawText(`City: ${address.city}, State: ${address.state}, Country: ${address.country}, Zip: ${address.zip}`, {
     x: 50,
     y: 435,
     size: 12,
@@ -208,12 +208,12 @@ const generatePDF = async (no) => {
     size: 12,
   });
   page.drawText("QUANTITY", {
-    x: 50 + cellWidth + 20, // Adjust the x-coordinate for spacing
+    x: 50 + cellWidth + 20,
     y: 355,
     size: 12,
   });
   page.drawText("PRICE", {
-    x: 50 + cellWidth + 110, // Adjust the x-coordinate for spacing
+    x: 50 + cellWidth + 110,
     y: 355,
     size: 12,
   });
@@ -259,7 +259,7 @@ let tprice = String(parseFloat(store.getters.cartTotalPrice).toFixed(2))
     size: 14,
   });
   page.drawText(`Order Amount: ${Totalprice}`, {
-    x: 277,
+    x: 276,
     y: totaly - 50,
     size: 14
   });
@@ -275,7 +275,7 @@ let tprice = String(parseFloat(store.getters.cartTotalPrice).toFixed(2))
     size: 18,
   });
   page.drawText(` Cash On Delivery`, {
-    x: 200,
+    x: 180,
     y: totaly - 120,
     size: 12,
   });

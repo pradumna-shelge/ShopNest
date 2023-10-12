@@ -427,7 +427,7 @@ onMounted(() => {
                 class=" border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  border-gray-600   focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Sell Price" />
               <span class="text-red-400 text-xs text-end" v-for="error in $v.price.$errors">{{
-                CustomValidationMsg(error.$message, "Product Price") }}</span>
+                CustomValidationMsg(error.$message, "Product Sell Price") }}</span>
             </div>
 
             <!-- <button
