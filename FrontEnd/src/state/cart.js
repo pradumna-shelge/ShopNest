@@ -1,5 +1,4 @@
 import { createStore } from 'vuex';
-
 const store = createStore({
   state: {
     cart: [], 
@@ -7,10 +6,9 @@ const store = createStore({
   mutations: {
     addToCart(state, product) {
       state.cart.push(product);
-      console.log(state.cart.length);
+console.log(state.cart.length);
     },
      addList(state, product) {
-      debugger;
       state.cart=product;
       console.log(state.cart.length);
     },

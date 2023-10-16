@@ -11450,11 +11450,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\VUE\\Vue-Explore\\project\\shoppingWebsite\\BackEnd\\BackEnd\\BackEnd.csproj",
+      "projectUniqueName": "D:\\VUE\\ShopNest\\ShopNest\\BackEnd\\BackEnd\\BackEnd.csproj",
       "projectName": "BackEnd",
-      "projectPath": "D:\\VUE\\Vue-Explore\\project\\shoppingWebsite\\BackEnd\\BackEnd\\BackEnd.csproj",
+      "projectPath": "D:\\VUE\\ShopNest\\ShopNest\\BackEnd\\BackEnd\\BackEnd.csproj",
       "packagesPath": "C:\\Users\\pradumna.shelage\\.nuget\\packages\\",
-      "outputPath": "D:\\VUE\\Vue-Explore\\project\\shoppingWebsite\\BackEnd\\BackEnd\\obj\\",
+      "outputPath": "D:\\VUE\\ShopNest\\ShopNest\\BackEnd\\BackEnd\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pradumna.shelage\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -139,3 +139,22 @@ INSERT INTO Location (LocationID, ParentLocationID, Name)
 VALUES (12, 4, 'Pune');
 INSERT INTO Location (LocationID, ParentLocationID, Name)
 VALUES (13, 4, 'Nagpur');
+
+
+CREATE TABLE DeliveryAddresses (
+    AddressID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT, 
+    Country VARCHAR(200),
+    State VARCHAR(200),
+    City VARCHAR(200),
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    AddressLine NVARCHAR(Max),
+    ZIP VARCHAR(10),
+    CONSTRAINT FK_UserID FOREIGN KEY (UserID) REFERENCES Users (UserID)
+);
+
+-- Inserting a sample address for India, Maharashtra, Mumbai
+INSERT INTO DeliveryAddresses (UserID, Country, State, City, FirstName, LastName, AddressLine, ZIP)
+VALUES
+    (87, 'India', 'Maharashtra', 'Pune', 'pradumna', 'shelge', N'123 Sample St', '400001');

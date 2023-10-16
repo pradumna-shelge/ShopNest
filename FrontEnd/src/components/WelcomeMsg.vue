@@ -14,7 +14,7 @@ const closeModal = () => {
 }
 
 const getData = () => {
-  debugger;
+
   const data = JSON.parse(localStorage.getItem("loginInfo"));
   openModalFlag.value = data
   flagTemp.value = localStorage.getItem("loginFlag") == "true" ? true : false

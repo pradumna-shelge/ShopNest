@@ -38,7 +38,7 @@ const { getData, data, error } = getApiData();
 const url = ref(productApi);
 const flag = ref(true)
 const asyncFunction = async () => {
-  debugger;
+
   const productName = route.params.nameOfProduct
   flag.value = true
   await getData(url.value).then(() => {
