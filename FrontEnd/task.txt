@@ -107,6 +107,17 @@ Date- 12/10/2023
 2. Conversation with Anil sir to update profile document.
 3. Given PreAssistant test.
 
+Date- 13/10/2023
+1. Learning and using of magicZoom library on the website.
+2. Shopping product order quantity control in frontend
+
+
+  Date- 16/10/2023
+  1. Go through the advanced concepts of GitHub.
+  2. Going through the coding standard of vue.js
+  3. Revising angular concepts.
+  
+
 Solving some bugs in the website, user-cart default screen for no Item.
 Removing of image file from server after deleting of record.
 There should be searching and sorting in the grid for each column.
