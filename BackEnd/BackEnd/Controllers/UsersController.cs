@@ -25,16 +25,28 @@ namespace BackEnd.Controllers
         {
             _context = context;
         }
-
+        /// <summary>
+        /// Method Name : GetUsers()
+        /// Purpose : This method is used to get all details of users. It is used to show in User Grid
+        /// Created By : Pradumana Shelange
+        /// Created Date : 17/10/2023
+        /// Updated By :
+        /// Updated Date :
+        /// Updated Reason :
+        /// </summary>
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-          if (_context.Users == null)
+          if (_context.Users == null) // For not availibility of users
           {
               return NotFound();
           }
+          // This line is commented by Pradumana for research. 
           //var data = await _context.Users.Select(u => new { u.Username, u.Email, u.LastLogin, u.UserId }).OrderByDescending(u=>u.UserId).ToListAsync();
+
+          // Commented by Pradumana as per task ID 1234-ASDFASDFASDF   and suggested by Anilbhai Dated.17/10/2023
+          //  var data = await _context.Users   
             var data = await _context.Users
     .Join(
         _context.UserRoleMappings,
@@ -44,10 +56,10 @@ namespace BackEnd.Controllers
         {
             user.Username,
             user.Email,
-            user.LastLogin,
+            user.LastLogin, // It is for obtaining last login information of logged user.
             user.UserId,
             mapping.RoleId ,
-            user.PasswordHash
+            user.PasswordHash // It is for password with encrypted value.
         })
     .OrderByDescending(u => u.UserId)
     .ToListAsync();

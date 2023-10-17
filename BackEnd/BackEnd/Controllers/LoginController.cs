@@ -9,6 +9,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using NuGet.Versioning;
+using backend.Services;
 
 namespace BackEnd.Controllers
 {
@@ -44,7 +45,13 @@ namespace BackEnd.Controllers
                     {
                         userObject.ResetLinkExpiration= DateTime.Now;
                         userObject.ResetLink = "";
+
                     }
+                        var emailOb = new EmailServices(_config);
+                        var sub = "";
+                        var body = "";
+
+                        emailOb.SendEmail(userObject.Email, sub, body);
                   await  _contex.SaveChangesAsync();
 
                 
