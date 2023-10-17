@@ -2,7 +2,7 @@ import {ref} from 'vue'
 import { createToaster } from "@meforma/vue-toaster";
 import axios from 'axios';
 import {loginusername} from './isLogin'
-import {cartApi} from '../Endpoints/ApiLinks';
+import {cartApi,orderProductApi} from '../Endpoints/ApiLinks';
 
 
 const toaster = createToaster({
@@ -54,7 +54,7 @@ if (res.status === 200) {
 
 export async function ProductCartDelete(id) {
   const url = cartApi;
-  debugger;
+  
   return new Promise(async (resolve, reject) => {
     try {
       
@@ -74,3 +74,18 @@ export async function ProductCartDelete(id) {
     }
   });
 }
+export const orderProducts = () => {
+   debugger;
+  return new Promise(async (resolve, reject) => {
+    const userName = loginusername.value;
+    const url = orderProductApi + `?userName=${userName}`;
+    try {
+      const res = await axios.post(url);
+      console.log(res.data);
+      resolve(res.data); 
+    } catch (err) {
+      console.error("error", err);
+      reject(err); 
+    }
+  });
+};

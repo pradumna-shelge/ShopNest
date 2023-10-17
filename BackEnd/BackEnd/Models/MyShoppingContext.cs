@@ -17,6 +17,10 @@ public partial class MyShoppingContext : DbContext
 
     public virtual DbSet<AddToCart> AddToCarts { get; set; }
 
+    public virtual DbSet<DeliveryAddress> DeliveryAddresses { get; set; }
+
+    public virtual DbSet<Location> Locations { get; set; }
+
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderItem> OrderItems { get; set; }
@@ -58,6 +62,54 @@ public partial class MyShoppingContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.AddToCarts)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__AddToCart__UserI__46E78A0C");
+        });
+
+        modelBuilder.Entity<DeliveryAddress>(entity =>
+        {
+            entity.HasKey(e => e.AddressId).HasName("PK__Delivery__091C2A1B0364C40A");
+
+            entity.Property(e => e.AddressId).HasColumnName("AddressID");
+            entity.Property(e => e.City)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.Country)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.FirstName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.LastName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.State)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.Zip)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("ZIP");
+
+            entity.HasOne(d => d.User).WithMany(p => p.DeliveryAddresses)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_UserID");
+        });
+
+        modelBuilder.Entity<Location>(entity =>
+        {
+            entity.HasKey(e => e.LocationId).HasName("PK__Location__E7FEA4774D256F31");
+
+            entity.ToTable("Location");
+
+            entity.Property(e => e.LocationId)
+                .ValueGeneratedNever()
+                .HasColumnName("LocationID");
+            entity.Property(e => e.Name).HasMaxLength(255);
+            entity.Property(e => e.ParentLocationId).HasColumnName("ParentLocationID");
+
+            entity.HasOne(d => d.ParentLocation).WithMany(p => p.InverseParentLocation)
+                .HasForeignKey(d => d.ParentLocationId)
+                .HasConstraintName("FK_Location_ParentLocation");
         });
 
         modelBuilder.Entity<Order>(entity =>

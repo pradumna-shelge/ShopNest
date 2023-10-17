@@ -13,6 +13,8 @@ public partial class Order
 
     public decimal TotalAmount { get; set; }
 
+    public long? InvoiceNo { get; set; }
+
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
     public virtual User? User { get; set; }
