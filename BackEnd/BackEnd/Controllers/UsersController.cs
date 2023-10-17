@@ -19,110 +19,84 @@ namespace BackEnd.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly MyShoppingContext _context;
+        private readonly ShopNestContext _context;
 
-        public UsersController(MyShoppingContext context)
+        public UsersController(ShopNestContext context)
         {
             _context = context;
         }
 
-        // GET: api/Users
+        /// <summary>
+        /// Method Name: GetUsers
+        /// Purpose: Retrieves a list of user information.
+        /// Created By: Pradumna shelage
+        /// Created Date: 17-10-2023
+        /// Updated By:
+        /// Updated Date:
+        /// Updated Reason:
+        /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult> GetUsers()
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-          //var data = await _context.Users.Select(u => new { u.Username, u.Email, u.LastLogin, u.UserId }).OrderByDescending(u=>u.UserId).ToListAsync();
-            var data = await _context.Users
-    .Join(
-        _context.UserRoleMappings,
-        user => user.UserId,
-        mapping => mapping.UserId,
-        (user, mapping) => new
-        {
-            user.Username,
-            user.Email,
-            user.LastLogin,
-            user.UserId,
-            mapping.RoleId ,
-            user.PasswordHash
-        })
-    .OrderByDescending(u => u.UserId)
-    .ToListAsync();
-            return Ok(data);
-        }
-
-        // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
-        {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
+            if (_context.MstUsers == null)
             {
                 return NotFound();
             }
-
-            return user;
+            var data = await _context.VwUserInfos
+                .ToListAsync();
+            return Ok(data);
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Method Name: PutUser
+        /// Purpose: Updates user information with the provided data.
+        /// Created By: Pradumna shelage
+        /// Created Date: 17-10-2023
+        /// Updated By:
+        /// Updated Date:
+        /// Updated Reason:
+        /// </summary>
         [HttpPut]
         public async Task<IActionResult> PutUser(userDto user)
         {
-
             if (user == null)
             {
                 return BadRequest();
             }
             try
             {
-                var check = await _context.Users.FirstOrDefaultAsync(p => p.Username.ToLower().Trim() == user.Username.ToLower().Trim() && p.UserId != user.userId);
+                var check = await _context.MstUsers.FirstOrDefaultAsync(p => p.Username.ToLower().Trim() == user.Username.ToLower().Trim() && p.UserId != user.userId);
                 if (check != null)
                 {
-                    return BadRequest("That username is taken.Try another");
-                }
-                var checkEmail = await _context.Users.FirstOrDefaultAsync(p => p.Email.ToLower().Trim() == user.Email.ToLower().Trim() && p.UserId != user.userId);
-                if (checkEmail != null)
-                {
-                    return BadRequest("Email is taken.Use another");
+                    return BadRequest("That username is taken. Try another.");
                 }
 
-                var ob = await _context.Users.FirstOrDefaultAsync(p => p.UserId == user.userId);
+                var checkEmail = await _context.MstUsers.FirstOrDefaultAsync(p => p.Email.ToLower().Trim() == user.Email.ToLower().Trim() && p.UserId != user.userId);
+                if (checkEmail != null)
+                {
+                    return BadRequest("Email is taken. Use another.");
+                }
+
+                var ob = await _context.MstUsers.FirstOrDefaultAsync(p => p.UserId == user.userId);
                 if (ob == null)
                 {
                     return BadRequest();
                 }
 
-
-               
-
                 ob.Username = user.Username;
                 ob.Email = user.Email;
-
-                //ob.PasswordHash = ob.PasswordHash != "user-password" ?   HashPasswordClass.HashPassword(user.PasswordHash):ob.PasswordHash;
                 ob.PasswordHash = user.PasswordHash;
-                var mapID = await _context.UserRoleMappings.FirstOrDefaultAsync(m => m.UserId == ob.UserId);
-                var mapOb = await _context.UserRoleMappings.FindAsync(mapID !=null ? mapID.MappingId:-1);
 
-                if(mapOb != null)
+                var mapID = await _context.TrnUserRoleMappings.FirstOrDefaultAsync(m => m.UserId == ob.UserId);
+                var mapOb = await _context.TrnUserRoleMappings.FindAsync(mapID != null ? mapID.MappingId : -1);
+
+                if (mapOb != null)
                 {
                     mapOb.RoleId = user.userRole != null ? user.userRole : 2;
                     await _context.SaveChangesAsync();
-
                 }
 
-
                 await _context.SaveChangesAsync();
-
-                //return Ok("updated successfuly");
 
                 return Ok(ob);
             }
@@ -130,53 +104,59 @@ namespace BackEnd.Controllers
             {
                 return BadRequest(e);
             }
-
-            
         }
 
-
+        /// <summary>
+        /// Method Name: PostUser
+        /// Purpose: Adds a new user with the provided data.
+        /// Created By: Pradumna shelage
+        /// Created Date: 17-10-2023
+        /// Updated By:
+        /// Updated Date:
+        /// Updated Reason:
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult> PostUser(userDto user)
         {
             try
             {
-                if (_context.Users == null)
+                if (_context.MstUsers == null)
                 {
-                    return Problem("Entity set 'MyShoppingContext.Users'  is null.");
-                }
-                var users = await _context.Users.ToListAsync();
-
-                if(users.Find(p => p.Username.ToLower().Trim() == user.Username.ToLower().Trim()) != null)
-                {
-                    return BadRequest("That username is taken.Try another");
+                    return Problem("Entity set 'MyShoppingContext.Users' is null.");
                 }
 
-                var checkEmail = await _context.Users.FirstOrDefaultAsync(p => p.Email.ToLower().Trim() == user.Email.ToLower().Trim() && p.UserId != user.userId);
+                var users = await _context.MstUsers.ToListAsync();
+
+                if (users.Find(p => p.Username.ToLower().Trim() == user.Username.ToLower().Trim()) != null)
+                {
+                    return BadRequest("That username is taken. Try another.");
+                }
+
+                var checkEmail = await _context.MstUsers.FirstOrDefaultAsync(p => p.Email.ToLower().Trim() == user.Email.ToLower().Trim() && p.UserId != user.userId);
                 if (checkEmail != null)
                 {
-                    return BadRequest("Email is taken.Use another");
+                    return BadRequest("Email is taken. Use another.");
                 }
-                //user.PasswordHash = HashPasswordClass.HashPassword(user.PasswordHash);
 
-
-                var newUser = new User()
+                var newUser = new MstUser()
                 {
                     Username = user.Username,
                     PasswordHash = user.PasswordHash,
                     Email = user.Email,
                     RegistrationDate = user.RegistrationDate,
                     LastLogin = DateTime.Now,
-                    
                 };
-                await _context.Users.AddAsync(newUser);
+
+                await _context.MstUsers.AddAsync(newUser);
                 await _context.SaveChangesAsync();
-                var listUsers = await _context.Users.ToListAsync();
-                var usermappin = new UserRoleMapping
+
+                var listUsers = await _context.MstUsers.ToListAsync();
+                var userMapping = new TrnUserRoleMapping()
                 {
                     UserId = newUser.UserId,
-                    RoleId =  listUsers.ToList().Count()<2 || user.userRole==1   ? 1: 2
+                    RoleId = listUsers.Count() < 2 || user.userRole == 1 ? 1 : 2
                 };
-                await _context.UserRoleMappings.AddAsync(usermappin);
+                await _context.TrnUserRoleMappings.AddAsync(userMapping);
                 await _context.SaveChangesAsync();
 
                 return Ok("User added");
@@ -185,60 +165,68 @@ namespace BackEnd.Controllers
             {
                 return BadRequest();
             }
-          
-          
         }
 
-        // DELETE: api/Users/5  
+        /// <summary>
+        /// Method Name: DeleteUser
+        /// Purpose: Deletes a user and related data by their ID.
+        /// Created By: Pradumna shelage
+        /// Created Date: 17-10-2023
+        /// Updated By:
+        /// Updated Date:
+        /// Updated Reason:
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            if (_context.Users == null)
+            if (_context.MstUsers == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.MstUsers.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
-            var userRole = await _context.UserRoleMappings.FirstOrDefaultAsync(m => m.UserId == user.UserId);
-            var usermap = await _context.UserRoleMappings.FindAsync(userRole.MappingId);
-            var cartProducts = await _context.AddToCarts.Where(c => c.UserId == user.UserId).ToListAsync();
-            var orders = await _context.Orders.Where(o=>o.UserId== user.UserId).ToListAsync();
-            var address = await _context.DeliveryAddresses.Where(o => o.UserId == user.UserId).ToListAsync();
+
+            var userRole = await _context.TrnUserRoleMappings.FirstOrDefaultAsync(m => m.UserId == user.UserId);
+            var userMapping = await _context.TrnUserRoleMappings.FindAsync(userRole.MappingId);
+            var cartProducts = await _context.TrnAddToCarts.Where(c => c.UserId == user.UserId).ToListAsync();
+            var orders = await _context.TrnOrders.Where(o => o.UserId == user.UserId).ToListAsync();
+            var address = await _context.TrnUsersDeliveryAddresses.Where(o => o.UserId == user.UserId).ToListAsync();
+
             if (orders.Any())
             {
-                foreach(var ob in orders)
-
+                foreach (var ob in orders)
                 {
-                 var orderItems = await _context.OrderItems.Where(or=>or.OrderId==ob.OrderId).ToListAsync();
-
-                 _context.OrderItems.RemoveRange(orderItems);
-                  await  _context.SaveChangesAsync();
+                    var orderItems = await _context.TrnOrdersOrderItems.Where(or => or.OrderId == ob.OrderId).ToListAsync();
+                    _context.TrnOrdersOrderItems.RemoveRange(orderItems);
+                    await _context.SaveChangesAsync();
                 }
-
                 _context.RemoveRange(orders);
                 await _context.SaveChangesAsync();
             }
+
             if (address.Any())
             {
                 _context.RemoveRange(address);
                 await _context.SaveChangesAsync();
             }
-            if(cartProducts.Any())
+
+            if (cartProducts.Any())
             {
                 _context.RemoveRange(cartProducts);
                 await _context.SaveChangesAsync();
             }
-            if (usermap != null)
+
+            if (userMapping != null)
             {
-                _context.UserRoleMappings.Remove(usermap);
+                _context.TrnUserRoleMappings.Remove(userMapping);
                 await _context.SaveChangesAsync();
             }
 
-            _context.Users.Remove(user);
+            _context.MstUsers.Remove(user);
             await _context.SaveChangesAsync();
 
             return Ok("User is Deleted");
@@ -246,10 +234,7 @@ namespace BackEnd.Controllers
 
         private bool UserExists(int id)
         {
-            return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
+            return (_context.MstUsers?.Any(e => e.UserId == id)).GetValueOrDefault();
         }
-
-        
-
     }
 }

@@ -1,7 +1,9 @@
 ﻿using BackEnd.DTOs;
+using BackEnd.DTOs.spDTO;
 using BackEnd.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Security.AccessControl;
 
@@ -12,134 +14,159 @@ namespace BackEnd.Controllers
     public class AddtoCartController : ControllerBase
     {
 
-        private readonly MyShoppingContext _contex;
+        private readonly ShopNestContext _context;
         private readonly IConfiguration _config;
 
-        public AddtoCartController(MyShoppingContext context, IConfiguration configuration)
+        public AddtoCartController(ShopNestContext context, IConfiguration configuration)
         {
-            _contex = context;
+            _context = context;
             _config = configuration;
         }
 
+        /// <summary>
+        /// Method Name : getCartData()
+        /// Purpose : This method is used to get user shopping cart data by name
+        /// Created By : Pradumana shelage
+        /// Created Date : 17/10/2023
+        /// Updated By :
+        /// Updated Date :
+        /// Updated Reason :
+        /// </summary>
 
         [HttpGet]
 
         public async Task<ActionResult> getCartData(string userName)
         {
-
-           if(userName == null)
+            try
             {
-                return BadRequest();
-            }
-
-           var userOb = await _contex.Users.FirstOrDefaultAsync(u=>u.Username== userName);
-            if(userOb == null) {
-                return BadRequest();
-
-            }
-
-            var data = await _contex.AddToCarts.Join(
-                _contex.Products,
-                cart => cart.ProductId,
-                mapping => mapping.ProductId,
-                (cart, mapping) => new        
+                if (userName == null)
                 {
-                    Price = $"{mapping.Price:0.00}",
-                    Mrprice = $"{mapping.Mrprice:0.00}",
-                    cart.Quantity,
-                    mapping.ProductImage,
-                    mapping.ProductName,
-                    mapping.Description,
-                    cart.CartId,
-                    cart.UserId
+                    return BadRequest("UserName cannot be null");
+                }
 
-                }).Where(cartMapping => cartMapping.UserId == userOb.UserId).OrderByDescending(x => x.CartId).ToListAsync();
+                var userNameParam = new SqlParameter("@UserName", userName);
 
-         return Ok(data);
+                
+                var data = await _context
+                    .Set<CartItemDTO>()
+                    .FromSqlRaw("EXEC GetCartData @UserName", userNameParam)
+                    .ToListAsync();
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred: " + ex.Message);
+            }
+
         }
 
 
+        /// <summary>
+        /// Method Name : addCartData()
+        /// Purpose : This method is used to add new item in user cart 
+        /// Created By : Pradumana shelage
+        /// Created Date : 17/10/2023
+        /// Updated By :
+        /// Updated Date :
+        /// Updated Reason :
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult> addCartData(cartDto cart)
         {
             try
             {
+                var cartData = await _context.TrnAddToCarts.ToListAsync();
+                var productData = await _context.MstProducts.ToListAsync();
 
-            var cartData = await _contex.AddToCarts.ToListAsync();
-                var productData = await _contex.Products.ToListAsync();    
-            
-            if(cartData == null || productData == null)
-            {
-                    return BadRequest();
-            }
+                if (cartData == null || productData == null)
+                {
+                    return BadRequest("Cart or product data is not available.");
+                }
+
                 var productObj = productData.FirstOrDefault(p => p.ProductName == cart.productName);
-                if(productObj != null)
-
+                if (productObj != null)
                 {
-                    var userOb = await _contex.Users.FirstOrDefaultAsync(u => u.Username == cart.username);
-                    if(userOb != null)
+                    var userOb = await _context.MstUsers.FirstOrDefaultAsync(u => u.Username == cart.username);
+                    if (userOb != null)
                     {
-                    
-                    var cartObj = cartData.FirstOrDefault(c => c.ProductId == productObj.ProductId && c.UserId == userOb.UserId);
+                        var cartObj = cartData.FirstOrDefault(c => c.ProductId == productObj.ProductId && c.UserId == userOb.UserId);
 
-                if(cartObj != null)
-                {
-                    cartObj.Quantity = cart.quantity;
-                    cartObj.Price = cart.price;
-                     
-                        await _contex.SaveChangesAsync();
-                        return Ok();
+                        if (cartObj != null)
+                        {
+                            cartObj.Quantity = cart.quantity;
+                            cartObj.Price = cart.price;
+
+                            await _context.SaveChangesAsync();
+
+                            return Ok("Cart updated successfully.");
+                        }
+                        else
+                        {
+                            var newCart = new TrnAddToCart()
+                            {
+                                ProductId = productObj.ProductId,
+                                Price = productObj.Price,
+                                UserId = userOb.UserId,
+                                Quantity = 1,
+                                AddedDateTime = DateTime.Now // It is fro product added date
+                            };
+
+                            await _context.AddAsync(newCart);
+                            await _context.SaveChangesAsync();
+
+                            return Ok("Cart added successfully.");
+                        }
                     }
                     else
                     {
-                        var newCart = new AddToCart()
-                        {
-                            ProductId = productObj.ProductId,
-                            Price = productObj.Price,
-                            UserId = userOb.UserId,
-                            Quantity = 1,
-                            AddedDateTime= DateTime.Now
-                        };
-                     await   _contex.AddAsync(newCart);
-                        await _contex.SaveChangesAsync();
+                        return BadRequest("User not found.");
                     }
-                    }
-                    return Ok();
-
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest("Product not found.");
                 }
-
-
-
             }
-            catch (Exception ex) { 
-             return BadRequest(ex);
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred: " + ex.Message);
             }
-        }
+        
+    }
 
-
+        /// <summary>
+        /// Method Name : DeleteCartProduct()
+        /// Purpose : This method is used to remove cart item by cart item id 
+        /// Created By : Pradumana shelage
+        /// Created Date : 17/10/2023
+        /// Updated By :
+        /// Updated Date :
+        /// Updated Reason :
+        /// </summary>
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCartProduct(int id)
         {
-            if (_contex.AddToCarts == null) { 
-           
-                return NotFound();
-            }
-
-            var product = await _contex.AddToCarts.FindAsync(id);
-            if (product == null)
+            try
             {
-                return NotFound();
+                var product = await _context.TrnAddToCarts.FindAsync(id);
+
+                if (product == null)
+                {
+                    return NotFound("Product not found.");
+                }
+
+                _context.TrnAddToCarts.Remove(product);
+                await _context.SaveChangesAsync();
+
+                return Ok("Product is Deleted");
             }
-
-            _contex.AddToCarts.Remove(product);
-            await _contex.SaveChangesAsync();
-
-            return Ok("Product is Deleted");
+            catch (Exception ex)
+            {
+                // Handle and log the exception as needed.
+                return StatusCode(500, "An error occurred: " + ex.Message);
+            }
 
 
 

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackEnd.Models;
-using BackEnd.DTOs;
 using static BackEnd.DTOs.DelivaryAddressDto;
 
 namespace BackEnd.Controllers
@@ -15,24 +14,22 @@ namespace BackEnd.Controllers
     [ApiController]
     public class DeliveryAddressesController : ControllerBase
     {
-        private readonly MyShoppingContext _context;
+        private readonly ShopNestContext _context;
 
-        public DeliveryAddressesController(MyShoppingContext context)
+        public DeliveryAddressesController(ShopNestContext context)
         {
             _context = context;
         }
 
-        // GET: api/DeliveryAddresses
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<DeliveryAddress>>> GetDeliveryAddresses()
-        {
-          if (_context.DeliveryAddresses == null)
-          {
-              return NotFound();
-          }
-            return await _context.DeliveryAddresses.ToListAsync();
-        }
-
+        /// <summary>
+        /// Method Name : GetDeliveryAddress()
+        /// Purpose : This method is used to get delivery address to place order by user name
+        /// Created By : Pradumana shelage
+        /// Created Date : 17/10/2023
+        /// Updated By :
+        /// Updated Date :
+        /// Updated Reason :
+        /// </summary>
         // GET: api/DeliveryAddresses/5
         [HttpGet("{name}")]
         public async Task<ActionResult> GetDeliveryAddress( string name)
@@ -43,13 +40,13 @@ namespace BackEnd.Controllers
                 return NotFound();
             }
 
-            var userObj = await _context.Users.FirstOrDefaultAsync(u=>u.Username== name);
+            var userObj = await _context.MstUsers.FirstOrDefaultAsync(u=>u.Username== name);
             if (userObj == null)
             {
                 return NotFound();
             }
 
-            var query = await _context.DeliveryAddresses
+            var query = await _context.TrnUsersDeliveryAddresses
                 .Select(a => new
                 {
                     a.UserId,
@@ -67,7 +64,17 @@ namespace BackEnd.Controllers
             return Ok(query);
         }
 
-     
+
+        /// <summary>
+        /// Method Name : PutDeliveryAddress()
+        /// Purpose : This method is used to update delivery address of user 
+        /// Created By : Pradumana shelage
+        /// Created Date : 17/10/2023
+        /// Updated By :
+        /// Updated Date :
+        /// Updated Reason :
+        /// </summary>
+
         [HttpPut]
         public async Task<IActionResult> PutDeliveryAddress(AddressDTO obj)
         {
@@ -77,7 +84,7 @@ namespace BackEnd.Controllers
             {
                 return NotFound();
             }
-            var newAddress = await _context.DeliveryAddresses.FirstOrDefaultAsync(d => d.AddressId == (obj.addressId??-1));
+            var newAddress = await _context.TrnUsersDeliveryAddresses.FirstOrDefaultAsync(d => d.AddressId == (obj.addressId??-1));
             if(newAddress == null || obj.addressId==null)
             {
                 return NotFound();
@@ -103,8 +110,19 @@ namespace BackEnd.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Method Name : AddDeliveryAddress()
+        /// Purpose : This method is used to add new Delivery address for specific user
+        /// Created By : Pradumana shelage
+        /// Created Date : 17/10/2023
+        /// Updated By :
+        /// Updated Date :
+        /// Updated Reason :
+        /// </summary>
+
         [HttpPost]
-        public async Task<ActionResult<DeliveryAddress>> PostDeliveryAddress(AddressDTO obj)
+        public async Task<ActionResult> AddDeliveryAddress(AddressDTO obj)
         {
 
             try
@@ -114,12 +132,12 @@ namespace BackEnd.Controllers
                     return BadRequest();
 
                 }
-                var userObj = await _context.Users.FirstOrDefaultAsync(u => u.Username == obj.username);
+                var userObj = await _context.MstUsers.FirstOrDefaultAsync(u => u.Username == obj.username);
                 if(userObj == null)
                 {
                     return BadRequest();
                 }
-                var newAddress = new DeliveryAddress()
+                var newAddress = new TrnUsersDeliveryAddress()
                 {
                     FirstName = obj.firstName,
                     LastName = obj.lastName,
@@ -143,29 +161,32 @@ namespace BackEnd.Controllers
             }
         }
 
-        // DELETE: api/DeliveryAddresses/5
+        /// <summary>
+        /// Method Name : DeleteDeliveryAddress()
+        /// Purpose : This method is used to remove delivery address by address id 
+        /// Created By : Pradumana shelage
+        /// Created Date : 17/10/2023
+        /// Updated By :
+        /// Updated Date :
+        /// Updated Reason :
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDeliveryAddress(int id)
         {
-            if (_context.DeliveryAddresses == null)
+            if (_context.TrnUsersDeliveryAddresses == null)
             {
                 return NotFound();
             }
-            var deliveryAddress = await _context.DeliveryAddresses.FindAsync(id);
+            var deliveryAddress = await _context.TrnUsersDeliveryAddresses.FindAsync(id);
             if (deliveryAddress == null)
             {
                 return NotFound();
             }
 
-            _context.DeliveryAddresses.Remove(deliveryAddress);
+            _context.TrnUsersDeliveryAddresses.Remove(deliveryAddress);
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool DeliveryAddressExists(int id)
-        {
-            return (_context.DeliveryAddresses?.Any(e => e.AddressId == id)).GetValueOrDefault();
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BackEnd.Models;
 
-public partial class DeliveryAddress
+public partial class TrnUsersDeliveryAddress
 {
     public int AddressId { get; set; }
 
@@ -23,5 +23,5 @@ public partial class DeliveryAddress
 
     public string? Zip { get; set; }
 
-    public virtual User? User { get; set; }
+    public virtual MstUser? User { get; set; }
 }

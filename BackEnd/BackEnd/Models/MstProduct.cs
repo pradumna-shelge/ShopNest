@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BackEnd.Models;
 
-public partial class Product
+public partial class MstProduct
 {
     public int ProductId { get; set; }
 
@@ -15,9 +15,9 @@ public partial class Product
 
     public decimal Price { get; set; }
 
-    public decimal? Mrprice { get; set; }
+    public decimal Mrprice { get; set; }
 
-    public virtual ICollection<AddToCart> AddToCarts { get; set; } = new List<AddToCart>();
+    public virtual ICollection<TrnAddToCart> TrnAddToCarts { get; set; } = new List<TrnAddToCart>();
 
-    public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public virtual ICollection<TrnOrdersOrderItem> TrnOrdersOrderItems { get; set; } = new List<TrnOrdersOrderItem>();
 }

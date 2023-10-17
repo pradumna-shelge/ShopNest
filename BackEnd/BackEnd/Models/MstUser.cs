@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BackEnd.Models;
 
-public partial class User
+public partial class MstUser
 {
     public int UserId { get; set; }
 
@@ -27,11 +27,11 @@ public partial class User
 
     public DateTime? ResetLinkExpiration { get; set; }
 
-    public virtual ICollection<AddToCart> AddToCarts { get; set; } = new List<AddToCart>();
+    public virtual ICollection<TrnAddToCart> TrnAddToCarts { get; set; } = new List<TrnAddToCart>();
 
-    public virtual ICollection<DeliveryAddress> DeliveryAddresses { get; set; } = new List<DeliveryAddress>();
+    public virtual ICollection<TrnOrder> TrnOrders { get; set; } = new List<TrnOrder>();
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public virtual ICollection<TrnUserRoleMapping> TrnUserRoleMappings { get; set; } = new List<TrnUserRoleMapping>();
 
-    public virtual ICollection<UserRoleMapping> UserRoleMappings { get; set; } = new List<UserRoleMapping>();
+    public virtual ICollection<TrnUsersDeliveryAddress> TrnUsersDeliveryAddresses { get; set; } = new List<TrnUsersDeliveryAddress>();
 }

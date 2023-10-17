@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BackEnd.Models;
 
-public partial class AddToCart
+public partial class TrnAddToCart
 {
     public int CartId { get; set; }
 
@@ -15,9 +15,9 @@ public partial class AddToCart
 
     public DateTime AddedDateTime { get; set; }
 
-    public decimal? Price { get; set; }
+    public decimal Price { get; set; }
 
-    public virtual Product? Product { get; set; }
+    public virtual MstProduct? Product { get; set; }
 
-    public virtual User? User { get; set; }
+    public virtual MstUser? User { get; set; }
 }

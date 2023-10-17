@@ -25,7 +25,7 @@ builder.Services.AddCors(options =>
                    .AllowAnyHeader();
         });
 });
-builder.Services.AddDbContext<MyShoppingContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ShopNestContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 var tk = builder.Configuration.GetSection("Jwt");

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BackEnd.Models;
 
-public partial class UserRoleMapping
+public partial class TrnUserRoleMapping
 {
     public int MappingId { get; set; }
 
@@ -11,7 +11,7 @@ public partial class UserRoleMapping
 
     public int? RoleId { get; set; }
 
-    public virtual UserRole? Role { get; set; }
+    public virtual MstUserRole? Role { get; set; }
 
-    public virtual User? User { get; set; }
+    public virtual MstUser? User { get; set; }
 }

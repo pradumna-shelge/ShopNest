@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BackEnd.Models;
 
-public partial class Order
+public partial class TrnOrder
 {
     public int OrderId { get; set; }
 
@@ -13,9 +13,9 @@ public partial class Order
 
     public decimal TotalAmount { get; set; }
 
-    public long? InvoiceNo { get; set; }
+    public long InvoiceNo { get; set; }
 
-    public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public virtual ICollection<TrnOrdersOrderItem> TrnOrdersOrderItems { get; set; } = new List<TrnOrdersOrderItem>();
 
-    public virtual User? User { get; set; }
+    public virtual MstUser? User { get; set; }
 }

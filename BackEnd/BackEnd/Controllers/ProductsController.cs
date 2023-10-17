@@ -20,24 +20,32 @@ namespace BackEnd.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly MyShoppingContext _context;
+        private readonly ShopNestContext _context;
         private readonly IConfiguration _configuration;
 
-        public ProductsController(MyShoppingContext context,IConfiguration configuration)
+        public ProductsController(ShopNestContext context,IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
         }
-
+        /// <summary>
+        /// Method Name: GetProducts
+        /// Purpose: Retrieves a list of products.
+        /// Created By: Pradumna shelage
+        /// Created Date: 17-10-2023
+        /// Updated By:
+        /// Updated Date:
+        /// Updated Reason:
+        /// </summary>
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult> GetProducts()
         {
-          if (_context.Products == null)
+          if (_context.MstProducts == null)
           {
               return NotFound();
           }
-            var productNames = await _context.Products
+            var productNames = await _context.MstProducts
       .Select(x => new { x.ProductName,x.ProductId,
           Price = $"{x.Price:0.00}",
           Mrprice = $"{x.Mrprice:0.00}", x.Description,x.ProductImage}).OrderByDescending(x => x.ProductId)
@@ -46,26 +54,43 @@ namespace BackEnd.Controllers
             return Ok(productNames);
         }
 
+        /// <summary>
+        /// Method Name: GetProduct
+        /// Purpose: Retrieves a single product by its ID.
+        /// Created By: Pradumna shelage
+        /// Created Date: 17-10-2023
+        /// Updated By:
+        /// Updated Date:
+        /// Updated Reason:
+        /// </summary>
         // GET: api/Products/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult> GetProduct(int id)
         {
-          if (_context.Products == null)
+          if (_context.MstProducts == null)
           {
               return NotFound();
           }
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.MstProducts.FindAsync(id);
 
             if (product == null)
             {
                 return NotFound();
             }
 
-            return product;
+            return Ok( product);
         }
 
-        // PUT: api/Products/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Method Name: PutProduct
+        /// Purpose: Upadte the product infomation 
+        /// Created By: Pradumna shelage
+        /// Created Date: 17-10-2023
+        /// Updated By:
+        /// Updated Date:
+        /// Updated Reason:
+        /// </summary>
+
         [HttpPut]
         public async Task<IActionResult> PutProduct([FromForm] UpdateProductDto product)
         {
@@ -75,13 +100,13 @@ namespace BackEnd.Controllers
             }
             try
             {
-                var check = await _context.Products.FirstOrDefaultAsync(p => p.ProductName.ToLower().Trim() == product.productName.ToLower().Trim() && p.ProductId!=product.productId);
+                var check = await _context.MstProducts.FirstOrDefaultAsync(p => p.ProductName.ToLower().Trim() == product.productName.ToLower().Trim() && p.ProductId!=product.productId);
                 if (check != null)
                 {
                     return BadRequest("Product name already exist");
                 }
 
-                var  ob = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == product.productId);
+                var  ob = await _context.MstProducts.FirstOrDefaultAsync(p => p.ProductId == product.productId);
             if (ob == null)
             {
                 return BadRequest();
@@ -178,50 +203,28 @@ namespace BackEnd.Controllers
             return NoContent();
         }
 
-        // POST: api/Products
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Product>> PostProduct(ProductDto product)
-        //{
-        //    try
-        //    {
-        //        if (_context.Products == null)
-        //        {
-        //            return Problem("Entity set 'MyShoppingContext.Products'  is null.");
-        //        }
 
-        //        Product product1 = new Product()
-        //        {
-        //            ProductName = product.productName,
-        //            ProductImage = product.productImage,
-        //            Description = product.description,
-        //            Price = product.price
-        //        };
-        //        _context.Products.Add(product1);
-        //        await _context.SaveChangesAsync();
-
-        //        return Ok("added data");
-
-        //    }
-        //    catch(DbUpdateConcurrencyException)
-        //    {
-        //        return BadRequest("something went wrong");
-        //    }
-          
-        //}
-
+        /// <summary>
+        /// Method Name: PostProduct
+        /// Purpose: Method is used to add new product.
+        /// Created By: Pradumna shelage
+        /// Created Date: 17-10-2023
+        /// Updated By:
+        /// Updated Date:
+        /// Updated Reason:
+        /// </summary>
 
 
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct1([FromForm] ProductDto product)
+        public async Task<ActionResult> PostProduct([FromForm] ProductDto product)
         {
             try
             {
-                if (_context.Products == null)
+                if (_context.MstProducts == null)
                 {
                     return Problem("Entity set 'MyShoppingContext.Products'  is null.");
                 }
-                var ob = await _context.Products.FirstOrDefaultAsync(p=>p.ProductName.ToLower().Trim() == product.productName.ToLower().Trim());
+                var ob = await _context.MstProducts.FirstOrDefaultAsync(p=>p.ProductName.ToLower().Trim() == product.productName.ToLower().Trim());
                 if (ob != null)
                 {
                     return BadRequest("Product name already exist");
@@ -278,7 +281,7 @@ namespace BackEnd.Controllers
                     string imageUrl = client.GetPreSignedURL(urlRequest);
                     ;
 
-                    Product product1 = new Product()
+                    MstProduct product1 = new MstProduct()
                     {
                         ProductName = product.productName.Trim(),
                         ProductImage = imageUrl,
@@ -287,7 +290,7 @@ namespace BackEnd.Controllers
                         Mrprice = AddDecimalIfMissing( product.mrp)
                         
                     };
-                    _context.Products.Add(product1);
+                    _context.MstProducts.Add(product1);
                     await _context.SaveChangesAsync();
 
                     return Ok("added data");
@@ -300,23 +303,31 @@ namespace BackEnd.Controllers
             }
 
         }
-
+        /// <summary>
+        /// Method Name: DeleteProduct
+        /// Purpose: Method is used to remove product.
+        /// Created By: Pradumna shelage
+        /// Created Date: 17-10-2023
+        /// Updated By:
+        /// Updated Date:
+        /// Updated Reason:
+        /// </summary>
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            if (_context.Products == null)
+            if (_context.MstProducts == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.MstProducts.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            var cartProducts = await _context.AddToCarts
+            var cartProducts = await _context.TrnAddToCarts
     .Where(c => c.ProductId == product.ProductId )
     .ToListAsync();
            
@@ -330,16 +341,16 @@ namespace BackEnd.Controllers
             
 
            
-                    var orderItems = await _context.OrderItems.Where(or => or.ProductId == id).ToListAsync();
+                    var orderItems = await _context.TrnOrdersOrderItems.Where(or => or.ProductId == id).ToListAsync();
 
-                    _context.OrderItems.RemoveRange(orderItems);
+                    _context.TrnOrdersOrderItems.RemoveRange(orderItems);
                     await _context.SaveChangesAsync();
                 
 
                
             
 
-            _context.Products.Remove(product);
+            _context.MstProducts.Remove(product);
             await _context.SaveChangesAsync();
 
             return Ok("Product is Deleted");
@@ -371,7 +382,7 @@ namespace BackEnd.Controllers
 
         private bool ProductExists(int id)
         {
-            return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
+            return (_context.MstProducts?.Any(e => e.ProductId == id)).GetValueOrDefault();
         }
 
         private bool IsSupportedFileType(string contentType)

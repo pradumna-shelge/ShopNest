@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BackEnd.Models;
 
-public partial class Location
+public partial class MstLocation
 {
     public int LocationId { get; set; }
 
@@ -11,7 +11,7 @@ public partial class Location
 
     public string Name { get; set; } = null!;
 
-    public virtual ICollection<Location> InverseParentLocation { get; set; } = new List<Location>();
+    public virtual ICollection<MstLocation> InverseParentLocation { get; set; } = new List<MstLocation>();
 
-    public virtual Location? ParentLocation { get; set; }
+    public virtual MstLocation? ParentLocation { get; set; }
 }
