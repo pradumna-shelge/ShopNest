@@ -377,7 +377,7 @@ onMounted(() => {
                            <span
                              class="text-red-400 text-xs text-end" 
                              v-for="error in $v.username.$errors"
-                             >{{ CustomValidationMsg(error.$message, "UserName") }}</span
+                             >{{ CustomValidationMsg(error.$message, "User Name") }}</span
                            >
                          </div>
                           <div>

@@ -12,7 +12,7 @@ defineProps(['flag'])
         </svg>
     </div>
 </template>
-<style scoped>
+<style scoped>   
 .pos{
   position: fixed;
       z-index: 1;

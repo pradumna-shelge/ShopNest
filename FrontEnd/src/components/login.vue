@@ -38,7 +38,7 @@ const rules = computed(() => {
 
 const $v = useVuelidate(rules, formData);
 async function signIn() {
-    debugger;
+
 
     var d = await $v.value.$validate()
 
@@ -53,7 +53,7 @@ async function signIn() {
                 })
                 .catch((error) => {
                 });
-                 localStorage.setItem("loginFlag", true)
+            localStorage.setItem("loginFlag", true)
         }
         );
 
@@ -92,7 +92,7 @@ const passwordToggle = () => {
                             <input v-model="formData.username" type="text" id="username"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg -gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Enter your username">
-                            <span class="text-red-400 text-xs" v-for="error in $v.username.$errors">{{
+                            <span class="text-red-400 text-xs " v-for="error in $v.username.$errors">{{
                                 CustomValidationMsg(error.$message, "Username") }}</span>
                         </div>
                         <div>
@@ -122,7 +122,7 @@ const passwordToggle = () => {
                                     </svg>
                                 </button>
                             </div>
-                            <span class="text-red-400 text-xs" v-for="error in $v.password.$errors">{{
+                            <span class="text-red-400 text-xs   " v-for="error in $v.password.$errors">{{
                                 CustomValidationMsg(error.$message, "Password") }}</span>
                         </div>
                         <div class="flex justify-end">
@@ -145,7 +145,8 @@ const passwordToggle = () => {
     </section>
 
 
-<forgotpassword :childRef="childRef" @closeModal="closeModal"></forgotpassword></template>
+    <forgotpassword :childRef="childRef" @closeModal="closeModal"></forgotpassword>
+</template>
 
 
 

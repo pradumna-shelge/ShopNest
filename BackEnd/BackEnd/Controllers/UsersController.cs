@@ -205,9 +205,28 @@ namespace BackEnd.Controllers
             }
             var userRole = await _context.UserRoleMappings.FirstOrDefaultAsync(m => m.UserId == user.UserId);
             var usermap = await _context.UserRoleMappings.FindAsync(userRole.MappingId);
-
             var cartProducts = await _context.AddToCarts.Where(c => c.UserId == user.UserId).ToListAsync();
+            var orders = await _context.Orders.Where(o=>o.UserId== user.UserId).ToListAsync();
+            var address = await _context.DeliveryAddresses.Where(o => o.UserId == user.UserId).ToListAsync();
+            if (orders.Any())
+            {
+                foreach(var ob in orders)
 
+                {
+                 var orderItems = await _context.OrderItems.Where(or=>or.OrderId==ob.OrderId).ToListAsync();
+
+                 _context.OrderItems.RemoveRange(orderItems);
+                  await  _context.SaveChangesAsync();
+                }
+
+                _context.RemoveRange(orders);
+                await _context.SaveChangesAsync();
+            }
+            if (address.Any())
+            {
+                _context.RemoveRange(address);
+                await _context.SaveChangesAsync();
+            }
             if(cartProducts.Any())
             {
                 _context.RemoveRange(cartProducts);
@@ -218,6 +237,7 @@ namespace BackEnd.Controllers
                 _context.UserRoleMappings.Remove(usermap);
                 await _context.SaveChangesAsync();
             }
+
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 

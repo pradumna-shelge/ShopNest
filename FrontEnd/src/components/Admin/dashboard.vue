@@ -2,7 +2,7 @@
 import * as XLSX from 'xlsx';
 
 import spinner from './spinner.vue'
-import { formatDate ,addDecimalIfMissing} from '../../Services/FormatDate'
+import { formatDate, addDecimalIfMissing } from '../../Services/FormatDate'
 
 import { reactive, ref, computed, onMounted } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
@@ -10,7 +10,7 @@ import { CustomValidationMsg } from '../../Vadidators/index'
 import { required } from '@vuelidate/validators';
 import { createToaster } from "@meforma/vue-toaster";
 import { userApi, loginApi, productApi, imageApi } from '../../Endpoints/ApiLinks'
-import { getApiData, ProductAdd, ProductDelete, ProductUpdate, discription , productName } from '../../Services/products'
+import { getApiData, ProductAdd, ProductDelete, ProductUpdate, discription, productName } from '../../Services/products'
 import { loginRole } from './../../Services/islogin'
 const currentPage = ref(1);
 const DeleteId = ref(-1);
@@ -79,41 +79,7 @@ const rules = computed(() => {
 
 const $v = useVuelidate(rules, productData);
 
-// function handleImageChange(event) {
-//   const fileData = event.target.files[0];
-//   console.log(fileData);
 
-//   const selectedFile = event.target.files[0];
-//   const reader = new FileReader();
-//   reader.onload = (e) => {
-//     const content = new Uint8Array(e.target.result);
-//     if (!isJpeg(content)) {
-//       toaster.error("Invalid image content. Please select a valid image file.");
-//       event.target.value = "";
-
-//     } 
-//   };
-
-//   if (selectedFile) {
-//     const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/bmp"];
-//     const fileType = selectedFile.type;
-//     const maxSize = 2 * 1024 * 1024;
-
-//     if (!allowedTypes.includes(fileType.toLowerCase())) {
-//       toaster.error("Unsupported file type. Please select a PNG, JPEG, JPG, or BMP file.");
-
-//       event.target.value = "";
-//     }
-//     else if (selectedFile.size > maxSize) {
-//       toaster.error("File size exceeds the maximum limit of 2 MB.");
-//       event.target.value = "";
-//     }
-//     else {
-
-//       productData.productImage = fileData;
-//     }
-//   }
-// }
 function handleImageChange(event) {
   const fileData = event.target.files[0];
   console.log(fileData);
@@ -184,7 +150,7 @@ async function addProduct() {
 }
 async function updateProduct() {
 
-  debugger;
+
   var d = await $v.value.$validate()
   if (d) {
     flag.value = true;
@@ -461,7 +427,7 @@ onMounted(() => {
                 class=" border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  border-gray-600   focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Sell Price" />
               <span class="text-red-400 text-xs text-end" v-for="error in $v.price.$errors">{{
-                CustomValidationMsg(error.$message, "Product Price") }}</span>
+                CustomValidationMsg(error.$message, "Product Sell Price") }}</span>
             </div>
 
             <!-- <button
@@ -509,7 +475,8 @@ onMounted(() => {
                     <path
                       d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
                   </svg><svg @click="sortColumn('productName', false)" xmlns="http://www.w3.org/2000/svg" width="16"
-                    height="16" fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    height="16" fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill"
+                    viewBox="0 0 16 16">
                     <path
                       d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
                   </svg></span>
@@ -527,7 +494,8 @@ onMounted(() => {
                     <path
                       d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
                   </svg><svg @click="sortColumn('description', false)" xmlns="http://www.w3.org/2000/svg" width="16"
-                    height="16" fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    height="16" fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill"
+                    viewBox="0 0 16 16">
                     <path
                       d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
                   </svg></span>
@@ -546,7 +514,8 @@ onMounted(() => {
                     <path
                       d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
                   </svg><svg @click="sortColumn('price', false)" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                    fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill"
+                    viewBox="0 0 16 16">
                     <path
                       d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
                   </svg></span>
@@ -570,7 +539,8 @@ onMounted(() => {
                     <path
                       d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
                   </svg><svg @click="sortColumn('mrp', false)" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                    fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    fill="currentColor" class="cursor-pointer hover:text-gray-900 bi bi-caret-down-fill"
+                    viewBox="0 0 16 16">
                     <path
                       d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
                   </svg></span>
@@ -602,7 +572,8 @@ onMounted(() => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(p, index) in displayedProducts" :key="index" class="cursor-pointer hover:bg-gray-100 cursor-pointer">
+            <tr v-for="(p, index) in displayedProducts" :key="index"
+              class="cursor-pointer hover:bg-gray-100 cursor-pointer">
               <td class="px-5 py-2  border-b  ">
                 <div class="flex items-center justify-start gap-3  ">
                   <div class=" ">
@@ -610,7 +581,7 @@ onMounted(() => {
                   </div>
 
                   <div class=" text-black     text-sm">
-                    {{ productName( p.productName )}}
+                    {{ productName(p.productName) }}
                   </div>
 
                 </div>
@@ -654,11 +625,10 @@ onMounted(() => {
                 </button>
                 <button @click="open(p.productId)" class="Btn py-3 hover:text-sky-900 text-sky-700 mt-1">
                   <router-link :to="{ name: 'product', params: { nameOfProduct: p.productName } }">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                      class="bi bi-arrows-angle-expand" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd"
-                        d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707z" />
-                    </svg>
+                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+  </svg>
                   </router-link>
 
                   <span class="tooltip">View</span>
@@ -824,5 +794,4 @@ th {
     transform: translateY(0px);
     opacity: 1;
   }
-}
-</style>
+}</style>
