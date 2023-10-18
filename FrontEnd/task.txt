@@ -117,6 +117,13 @@ Date- 13/10/2023
   2. Going through the coding standard of vue.js
   3. Revising angular concepts.
   
+ Date- 17/10/2023
+  1. Discussion with Maniar sir about MS SQL coding standards. 
+  2. Creating a new database with coding standards table, views and storage procedures.
+  3. Implementation of new database in dot core.
+  4. Added commenting for API controllers
+
+
 
 Solving some bugs in the website, user-cart default screen for no Item.
 Removing of image file from server after deleting of record.

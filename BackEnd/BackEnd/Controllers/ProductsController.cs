@@ -127,7 +127,6 @@ namespace BackEnd.Controllers
                     const long maxFileSize = 2 * 1024 * 1024;
                     if (file.Length > maxFileSize)
                     {
-
                         return BadRequest("File size exceeds 2MB limit.");
                     }
 

@@ -1,48 +1,52 @@
---create database MyShopping
---use MyShopping
+--create database ShopNest
+--use ShopNest
 --USE MASTER
---DROP DATABASE MyShopping
+--DROP DATABASE ShopNest
 
-CREATE TABLE UserRoles (
+
+-------------------------------------------------------------User Roles Table -----------------
+CREATE TABLE mst_UserRoles (
     RoleID INT PRIMARY KEY IDENTITY(1,1),
     RoleName VARCHAR(50) NOT NULL
 );
 
-INSERT INTO UserRoles (RoleName)
+INSERT INTO mst_UserRoles (RoleName)
 VALUES
     ('Customer'),          
     ('PremiumCustomer'),     
     ('Admin');             
 
 
-CREATE TABLE Users (
+
+------------------------------------------------------------Users Table--------------------------
+CREATE TABLE mst_Users (
     UserID INT PRIMARY KEY IDENTITY(1,1),
     Username VARCHAR(50) NOT NULL,
     PasswordHash VARCHAR(100) NOT NULL,
     Email VARCHAR(100) NOT NULL,
-    RegistrationDate DATETIME NOT NULL
-);
-
-
-ALTER TABLE Users
-ADD OTP VARCHAR(6),
+    RegistrationDate DATETIME NOT NULL,
+	OTP VARCHAR(6),
     OTPDateTime DATETIME,
     LastLogin DATETIME,
-    LoginPCNo VARCHAR(50);
-ALTER TABLE Users
-ADD ResetLink VARCHAR(100), 
-    ResetLinkExpiration DATETIME;
+    LoginPCNo VARCHAR(50),
+	ResetLink VARCHAR(100), 
+    ResetLinkExpiration DATETIME
+);
 
-
-CREATE TABLE UserRoleMapping (
+------------------------------------------------------------ User Role mapping table using user tabel in role tabel -------------
+CREATE TABLE trn_UserRoleMapping (
     MappingID INT PRIMARY KEY IDENTITY(1,1),
     UserID INT,
     RoleID INT,
-    FOREIGN KEY (UserID) REFERENCES Users (UserID),
-    FOREIGN KEY (RoleID) REFERENCES UserRoles (RoleID)
+    FOREIGN KEY (UserID) REFERENCES mst_Users (UserID),
+    FOREIGN KEY (RoleID) REFERENCES mst_UserRoles (RoleID)
 );
 
-CREATE TABLE Products (
+
+
+
+----------------------------------------------------------- Product Table ---------------------------------------
+CREATE TABLE mst_Products (
     ProductID INT PRIMARY KEY IDENTITY(1,1),
     ProductName VARCHAR(100) NOT NULL,
 	ProductImage NVARCHAR(MAX) NOT NULL,
@@ -50,98 +54,61 @@ CREATE TABLE Products (
     Price DECIMAL(10, 2) NOT NULL,
 );
 
+alter table mst_Products
+add Mrprice  DECIMAL(10, 2) NOT NULL
 
-CREATE TABLE Orders (
+---------------------------------------------------------  Orders Table ---------------------------------------------
+CREATE TABLE trn_Orders (
     OrderID INT PRIMARY KEY IDENTITY(1,1),
     UserID INT,
     OrderDate DATETIME NOT NULL,
     TotalAmount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES Users (UserID)
+    FOREIGN KEY (UserID) REFERENCES mst_Users (UserID)
 );
-
-CREATE TABLE OrderItems (
+alter table trn_Orders
+add InvoiceNo bigint not null
+------------------------------------------------------  Order Item Table ----------------------------------------------
+CREATE TABLE trn_Orders_OrderItems (
     OrderItemID INT PRIMARY KEY IDENTITY(1,1),
     OrderID INT,
     ProductID INT,
     Quantity INT NOT NULL,
     Price DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (OrderID) REFERENCES Orders (OrderID),
-    FOREIGN KEY (ProductID) REFERENCES Products (ProductID)
+    FOREIGN KEY (OrderID) REFERENCES trn_Orders (OrderID),
+    FOREIGN KEY (ProductID) REFERENCES mst_Products (ProductID)
 );
-CREATE TABLE AddToCart (
+
+------------------------------------------------------ user cart Table ---------------------------------------------
+CREATE TABLE trn_AddToCart (
     CartID INT PRIMARY KEY IDENTITY(1,1),
-    UserID INT, -- Foreign key to link the cart with a specific user
-    ProductID INT, -- Foreign key to link the cart with a specific product
+    UserID INT, 
+    ProductID INT, 
     Quantity INT NOT NULL,
     AddedDateTime DATETIME NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES Users (UserID),
-    FOREIGN KEY (ProductID) REFERENCES Products (ProductID)
+    FOREIGN KEY (UserID) REFERENCES mst_Users (UserID),
+    FOREIGN KEY (ProductID) REFERENCES mst_Products (ProductID)
 );
 
+alter table trn_AddToCart
+add Price  DECIMAL(10, 2) NOT NULL
 
-INSERT INTO Products (ProductName, Description, Price,ProductImage)
-VALUES
-    ('iPhone 13 Pro', 'Apple iPhone 13 Pro with A15 Bionic chip and Pro camera system.', 999.99,'https://www.apple.com/newsroom/images/product/iphone/standard/Apple_iphone13_hero_09142021_inline.jpg.slideshow-medium_2x.jpg'),
-    ('Samsung Galaxy S21', 'Samsung Galaxy S21 5G with 8K video and Exynos 2100.', 799.99,'https://images.samsung.com/is/image/samsung/p6pim/in/sm-g990blg4ins/gallery/in-galaxy-s21-fe-g990-464368-sm-g990blg4ins-thumb-537060640'),
-    ('Sony PlayStation 5', 'Sony PS5 gaming console with 4K Ultra HD Blu-ray.', 499.99,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSG8EWm1vwNnXFsblkeOCQbmfXf-3Lm7F7Pn7F62HcB_yBd9BKr7vo36qpqQRUDzcpDbc4&usqp=CAU'),
-    ('MacBook Air', 'Apple MacBook Air with M1 chip and Retina display.', 1199.99,'https://photos5.appleinsider.com/gallery/49833-97645-Brydge-ProDock-xl.jpg');
- 
-
-
-
- CREATE TABLE Location (
+--------------------------------------------------- location Table ----------------------------
+ CREATE TABLE mst_Location (
     LocationID INT PRIMARY KEY,
     ParentLocationID INT,
     Name NVARCHAR(255) NOT NULL
 );
 
 -- Add foreign key constraint for ParentLocationID
-ALTER TABLE Location
+ALTER TABLE mst_Location
 ADD CONSTRAINT FK_Location_ParentLocation
 FOREIGN KEY (ParentLocationID)
-REFERENCES Location(LocationID);
+REFERENCES mst_Location(LocationID);
 
 
 
-
--- Insert countries (if not already present)
-INSERT INTO Location (LocationID, Name)
-VALUES (1, 'India');
-
--- Insert Indian states
-INSERT INTO Location (LocationID, ParentLocationID, Name)
-VALUES (2, 1, 'Andhra Pradesh');
-INSERT INTO Location (LocationID, ParentLocationID, Name)
-VALUES (3, 1, 'Tamil Nadu');
-INSERT INTO Location (LocationID, ParentLocationID, Name)
-VALUES (4, 1, 'Maharashtra');
-
--- Insert cities in Andhra Pradesh
-INSERT INTO Location (LocationID, ParentLocationID, Name)
-VALUES (5, 2, 'Hyderabad');
-INSERT INTO Location (LocationID, ParentLocationID, Name)
-VALUES (6, 2, 'Visakhapatnam');
-INSERT INTO Location (LocationID, ParentLocationID, Name)
-VALUES (7, 2, 'Vijayawada');
-
--- Insert cities in Tamil Nadu
-INSERT INTO Location (LocationID, ParentLocationID, Name)
-VALUES (8, 3, 'Chennai');
-INSERT INTO Location (LocationID, ParentLocationID, Name)
-VALUES (9, 3, 'Coimbatore');
-INSERT INTO Location (LocationID, ParentLocationID, Name)
-VALUES (10, 3, 'Madurai');
-
--- Insert cities in Maharashtra
-INSERT INTO Location (LocationID, ParentLocationID, Name)
-VALUES (11, 4, 'Mumbai');
-INSERT INTO Location (LocationID, ParentLocationID, Name)
-VALUES (12, 4, 'Pune');
-INSERT INTO Location (LocationID, ParentLocationID, Name)
-VALUES (13, 4, 'Nagpur');
-
-
-CREATE TABLE DeliveryAddresses (
+------------------------------------------------ Order Delivery Addresses Table -------------
+CREATE TABLE trn_Users_DeliveryAddresses (
     AddressID INT PRIMARY KEY IDENTITY(1,1),
     UserID INT, 
     Country VARCHAR(200),
@@ -151,10 +118,70 @@ CREATE TABLE DeliveryAddresses (
     LastName VARCHAR(50),
     AddressLine NVARCHAR(Max),
     ZIP VARCHAR(10),
-    CONSTRAINT FK_UserID FOREIGN KEY (UserID) REFERENCES Users (UserID)
+    CONSTRAINT FK_UserID FOREIGN KEY (UserID) REFERENCES mst_Users (UserID)
 );
 
--- Inserting a sample address for India, Maharashtra, Mumbai
-INSERT INTO DeliveryAddresses (UserID, Country, State, City, FirstName, LastName, AddressLine, ZIP)
-VALUES
-    (87, 'India', 'Maharashtra', 'Pune', 'pradumna', 'shelge', N'123 Sample St', '400001');
+
+-------------------------------------------- Views ----------------------------------------------------------------------
+
+----------------------------------- users and role info  view -------------------------------------------------------------
+go
+CREATE VIEW vw_UserInfo AS
+SELECT
+    u.Username,
+    u.Email,
+    u.LastLogin,
+    u.UserId,
+    m.RoleId,
+    u.PasswordHash
+FROM mst_Users u
+JOIN trn_UserRoleMapping m ON u.UserId = m.UserId;
+go
+
+select * from vw_UserInfo
+
+
+-------------------------------- Store Procedures ---------------
+
+--------------------------------------------user cart data ---------------------
+go
+CREATE PROCEDURE GetCartData
+    @UserName NVARCHAR(255)
+AS
+BEGIN
+    DECLARE @UserId INT;
+    
+    -- Find the user's ID based on the username
+    SELECT @UserId = UserId FROM mst_Users WHERE Username = @UserName;
+
+    -- Check if the user was found
+    IF @UserId IS NOT NULL
+    BEGIN
+        SELECT 
+            CONVERT(DECIMAL(10, 2), mp.Price) AS Price,
+            CONVERT(DECIMAL(10, 2), mp.Mrprice) AS Mrprice,
+            ca.Quantity,
+            mp.ProductImage,
+            mp.ProductName,
+            mp.Description,
+            ca.CartId,
+            ca.UserId
+        FROM trn_AddToCart ca
+        JOIN mst_Products mp ON ca.ProductId = mp.ProductId
+        WHERE ca.UserId = @UserId
+        ORDER BY ca.CartId DESC;
+    END
+    ELSE
+    BEGIN
+        -- Return an empty result or an error message
+        -- You can customize this part based on your requirements
+        SELECT NULL AS Price, NULL AS Mrprice, NULL AS Quantity, NULL AS ProductImage, NULL AS ProductName, NULL AS Description, NULL AS CartId, NULL AS UserId;
+    END
+END;
+go
+
+exec GetCartData @UserName='admin'
+drop PROCEDURE  GetCartData
+
+
+
