@@ -2,14 +2,12 @@
   1. Meeting with maniar sir
   2. Custom validations and image upload validations
   3. Worked on UI part and pagination
-
-
+ 
   Date- 19/09/2023
   1. Product edit and image validation.
   2. Token store and decode.
   3. Pagination, create a Custom modal.
-
-
+ 
   Date- 20/09/2023
   1. Functional bug solved in Vue.js project.
   2. Searching and sorting on individual columns.
@@ -26,22 +24,22 @@ Date- 21/09/2023
 2. Role base authentication and navigation
 3. Intermediate topics learning Vue.js 
 4. Meeting with Maniar sir
-
+ 
 Date- 25/09/2023
 1. Intermediate topics learning Vue.js.
 2. Meeting with Maniar sir.
 3. Forgot-password implementing in vue.js project.
-
+ 
 Date- 26/09/2023
 1. Implementing watchers, slot and provide/inject in Vue.js.
 2. User dashboard for admin in vue project.
 3. Meeting with Maniar sir.
-
+ 
 Date- 27/09/2023
 1. User dashboard for admin in vue project.
 2.user sign in and add user authentication
 2. Meeting with Maniar sir.
-
+    
 Date- 27/09/2023
 1. User dashboard for admin in vue project.
 2. user sign-in and add user authentication
@@ -91,7 +89,7 @@ Date- 09/10/2023
 1. Solving some bugs suggested by Maniar sir.
 2. Order table and controllers in dot net.
 3. Placing order resetting user-cart (70%)
-
+ 
 Date- 10/10/2023
 1. Solving some bugs suggested by Maniar sir.
 2. Order invoke controller in dot net.
@@ -101,7 +99,7 @@ Date- 11/10/2023
 1. Solving some bugs suggested by Maniar sir.
 2. Go through .NET coding guidelines.
 3. Solving some errors in API controllers.
-
+                
 Date- 12/10/2023
 1. Revising advanced concepts of .Net and C#.
 2. Conversation with Anil sir to update profile document.
@@ -111,7 +109,7 @@ Date- 13/10/2023
 1. Learning and using of magicZoom library on the website.
 2. Shopping product order quantity control in frontend
 
-
+    
   Date- 16/10/2023
   1. Go through the advanced concepts of GitHub.
   2. Going through the coding standard of vue.js
@@ -121,8 +119,15 @@ Date- 13/10/2023
   1. Discussion with Maniar sir about MS SQL coding standards. 
   2. Creating a new database with coding standards table, views and storage procedures.
   3. Implementation of new database in dot core.
-  4. Added commenting for API controllers
 
+
+    Date- 18/10/2023
+    1. Learned Vue SSR for server-side rendering.
+    2. Explored custom directive creation in Vue.js.
+    3. Studied .NET content negotiation for content formatting.
+    4. Investigated custom action result handling in .NET.
+    5. Gained knowledge of MS SQL transaction rollback methods.
+    6. Deepened understanding of MS SQL partitioning techniques for large dataset management.
 
 
 Solving some bugs in the website, user-cart default screen for no Item.

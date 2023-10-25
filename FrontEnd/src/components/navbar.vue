@@ -10,7 +10,7 @@ import {getCartData} from '../Services/cartServices'
  const emits = defineEmits();
  import { useStore } from 'vuex'; 
 const store = useStore();
-const cartItemCount = computed(() => store.getters.cartItemCount);;
+const cartItemCount = computed(() => store.getters.cartItemCount);
 const cartTotalPrice = store.getters.cartTotalPrice;
 const logout=()=>{
   console.log("navabr");
@@ -72,14 +72,10 @@ onMounted(() => {
           <button  v-if="flag" class="hover:border-b"> <router-link to="/dashboard">Products</router-link> </button>
           <button  v-if="!flag" class="hover:border-b"> <router-link to="/login">Products</router-link> </button>
           <button   v-if="loginRole=='admin' && flag "  class="hover:border-b"> <router-link to="/user-dashboard">Users</router-link> </button>
-               
-
         </ul>
       </div>
     </div>
   </nav>
-  
- 
 </template>
 
 
