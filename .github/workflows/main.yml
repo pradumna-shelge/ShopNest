@@ -1,0 +1,43 @@
+name: Deployment Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy_staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Build and Deploy to Staging
+        run: |
+          # Add your build and deployment commands here
+          # Example: npm install && npm run build && ./deploy.sh staging
+
+  deploy_production:
+    runs-on: ubuntu-latest
+    needs: build_and_deploy_staging
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Manual Approval
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const { data: pullRequest } = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.number
+            });
+            const isApproved = pullRequest.labels.some(label => label.name === 'approved');
+            if (!isApproved) {
+              console.log('This pull request requires approval.');
+              process.exit(1);
+            }
+      
+      - name: Deploy to Production
+        run: |
+          # Add your production deployment commands here
+          # Example: ./deploy.sh production
